@@ -13,6 +13,7 @@ public class Player {
      *  ATTRIBUTES
      */
     //STICKMAN
+    //sizes
     double rHead = 0.35;
     double rHand = 0.2;
     double hTrunk = 2.5;
@@ -23,7 +24,19 @@ public class Player {
     double stickman1x = 1;
     double stickman1y = 0;
 
-    Body trunk;
+    //COLLISION MANAGEMENT
+    Body head;              //-> inflicts damage
+    Body trunk;             //-> receives damage
+    //upper body
+    Body leftArm;           //-> receives damage
+    Body rightArm;
+    Body leftHand;          //-> inflicts damage
+    Body rightHand;
+    //lower body
+    Body leftLeg;           //-> receives damage
+    Body rightLeg;
+    Body leftFoot;          //-> inflicts damage
+    Body rightFoot;
 
     //WORLD
     World world;
@@ -40,7 +53,7 @@ public class Player {
 
         /** BODY ELEMENTS */
         //HEAD
-        Body head = new SimulationBody();
+        head = new SimulationBody();
         Convex c = Geometry.createCircle(rHead);
         BodyFixture bf = new BodyFixture(c);
         head.addFixture(bf);
@@ -58,7 +71,7 @@ public class Player {
         world.addBody(trunk);
 
         //ARM : left
-        Body leftArm = new SimulationBody();
+        leftArm = new SimulationBody();
         c = Geometry.createRectangle(wMember, hMember);
         bf = new BodyFixture(c);
         leftArm.addFixture(bf);
@@ -67,7 +80,7 @@ public class Player {
         world.addBody(leftArm);
 
         //ARM : right
-        Body rightArm = new SimulationBody();
+        rightArm = new SimulationBody();
         c = Geometry.createRectangle(wMember, hMember);
         bf = new BodyFixture(c);
         rightArm.addFixture(bf);
@@ -76,7 +89,7 @@ public class Player {
         world.addBody(rightArm);
 
         //HAND : left
-        Body leftHand = new SimulationBody();
+        leftHand = new SimulationBody();
         c = Geometry.createCircle(rHand);
         bf = new BodyFixture(c);
         leftHand.addFixture(bf);
@@ -88,7 +101,7 @@ public class Player {
         world.addJoint(leftHandLeftArm);
 
         //HAND : right
-        Body rightHand = new SimulationBody();
+        rightHand = new SimulationBody();
         c = Geometry.createCircle(rHand);
         bf = new BodyFixture(c);
         rightHand.addFixture(bf);
@@ -100,7 +113,7 @@ public class Player {
         world.addJoint(rightArmRightHand);
 
         //LEG : left
-        Body leftLeg = new SimulationBody();
+        leftLeg = new SimulationBody();
         c = Geometry.createRectangle(wMember, hMember);
         bf = new BodyFixture(c);
         leftLeg.addFixture(bf);
@@ -109,7 +122,7 @@ public class Player {
         world.addBody(leftLeg);
 
         //LEG : right
-        Body rightLeg = new SimulationBody();
+        rightLeg = new SimulationBody();
         c = Geometry.createRectangle(wMember, hMember);
         bf = new BodyFixture(c);
         rightLeg.addFixture(bf);
@@ -118,7 +131,7 @@ public class Player {
         world.addBody(rightLeg);
 
         //FOOT : left
-        Body leftFoot = new SimulationBody();
+        leftFoot = new SimulationBody();
         c = Geometry.createCircle(rHand);
         bf = new BodyFixture(c);
         leftFoot.addFixture(bf);
@@ -130,7 +143,7 @@ public class Player {
         world.addJoint(leftFootLeftLeg);
 
         //FOOT : right
-        Body rightFoot = new SimulationBody();
+        rightFoot = new SimulationBody();
         c = Geometry.createCircle(rHand);
         bf = new BodyFixture(c);
         rightFoot.addFixture(bf);
@@ -204,6 +217,44 @@ public class Player {
      */
     Body getGravityCenter(){
         return trunk;
+    }
+
+    /**
+     *  GET BODY PART TYPE
+     */
+    BodyPartType getBodyPartType(Body body){
+
+        if(body == head)
+            return BodyPartType.HEAD;
+
+        if(body == trunk)
+            return BodyPartType.TRUNK;
+
+        if(body == leftArm)
+            return BodyPartType.LEFTARM;
+
+        if(body == leftHand)
+            return BodyPartType.LEFTHAND;
+
+        if(body == leftLeg)
+            return BodyPartType.LEFTLEG;
+
+        if(body == leftFoot)
+            return BodyPartType.LEFTFOOT;
+
+        if(body == rightArm)
+            return BodyPartType.RIGHTARM;
+
+        if(body == rightHand)
+            return BodyPartType.RIGHTHAND;
+
+        if(body == rightLeg)
+            return BodyPartType.RIGHTLEG;
+
+        if(body == rightFoot)
+            return BodyPartType.RIGHTFOOT;
+
+        return BodyPartType.NONE;
     }
 
 }

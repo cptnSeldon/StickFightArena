@@ -11,8 +11,12 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
+import org.dyn4j.collision.manifold.Manifold;
+import org.dyn4j.collision.narrowphase.Penetration;
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.BodyFixture;
+import org.dyn4j.dynamics.CollisionListener;
+import org.dyn4j.dynamics.contact.ContactConstraint;
 import org.dyn4j.dynamics.joint.RevoluteJoint;
 import org.dyn4j.geometry.Convex;
 import org.dyn4j.geometry.Geometry;
@@ -22,6 +26,10 @@ import org.dyn4j.geometry.Vector2;
 public class Stickman extends SimulationFrame{
 
     /** ATTRIBUTES */
+    //PLAYERS
+    Player stick1;
+    Player stick2;
+    //ELSE
     private boolean isDragged =false;
 
     /**
@@ -86,11 +94,11 @@ public class Stickman extends SimulationFrame{
         double stickman1y = 0;
 
         //PLAYER : 1
-        Player stick1 = new Player(stickman1x, stickman1y, world);
+        stick1 = new Player(stickman1x, stickman1y, world);
         Body control = stick1.getGravityCenter();
 
         //PLAYER : 2
-        Player stick2 = new Player(3,0.5, world);
+        stick2 = new Player(3,0.5, world);
         Body control2 = stick2.getGravityCenter();
 
         /** LISTENERS */
@@ -191,7 +199,54 @@ public class Stickman extends SimulationFrame{
         });
 
         /** COLLISIONS */
-        
+        world.addListener(new CollisionListener() {
+
+            //SIMPLE TOUCH
+            @Override
+            public boolean collision(Body body, BodyFixture bodyFixture, Body body1, BodyFixture bodyFixture1) {
+
+                collisionManagement(body, body1);
+                return true;
+            }
+
+            //INSIDE ONE ANOTHER
+            @Override
+            public boolean collision(Body body, BodyFixture bodyFixture, Body body1, BodyFixture bodyFixture1, Penetration penetration) {
+                return true;
+            }
+
+            @Override
+            public boolean collision(Body body, BodyFixture bodyFixture, Body body1, BodyFixture bodyFixture1, Manifold manifold) {
+                return true;
+            }
+
+            @Override
+            public boolean collision(ContactConstraint contactConstraint) {
+                return true;
+            }
+        });
+
+    }
+
+    /**
+     *  COLLISION MANAGEMENT
+     */
+    private void collisionManagement(Body body0, Body body1) {
+
+        BodyPartType bpt1 = stick1.getBodyPartType(body0);
+        BodyPartType bpt2 = stick2.getBodyPartType(body1);
+
+        //test : bpt1 != none & bpt2 != none
+        if(bpt1 != BodyPartType.NONE && bpt2 != BodyPartType.NONE){
+
+            System.out.println("Stickman 1 touched with " + bpt1 + " Stickman 2 at " + bpt2);
+            return;
+        }
+
+
+
+
+
     }
 
     /**
