@@ -23,10 +23,7 @@ public class SimulationBody extends Body {
      */
     public SimulationBody() {
         // randomly generate the color
-        this.color = new Color(
-                (float)Math.random() * 0.5f + 0.5f,
-                (float)Math.random() * 0.5f + 0.5f,
-                (float)Math.random() * 0.5f + 0.5f);
+        this.color = new Color(0,0,0);
     }
 
     /**

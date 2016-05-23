@@ -7,6 +7,9 @@ import org.dyn4j.geometry.Geometry;
 import org.dyn4j.geometry.MassType;
 import org.dyn4j.geometry.Vector2;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 public class Player {
 
     /**
@@ -41,18 +44,29 @@ public class Player {
     int lifePoints;
     int maxLifePoints;
 
+
+    float force = 300;
+    Vector2 directionForce;
+    Boolean directionKeys[] = {false, false, false, false};
+
     //WORLD
     World world;
 
     public static int keyStatments;
 
+    Collection<RevoluteJoint> joints;
+
     /**
      * CONSTRUCTOR
      */
     public Player(double stickman1x, double stickman1y, World world) {
+        directionForce = new Vector2(0,0);
+
         this.stickman1x = stickman1x;
         this.stickman1y = stickman1y;
         this.world = world;
+
+        joints = new ArrayList<>();
 
         /** BODY ELEMENTS */
         //HEAD
@@ -102,6 +116,7 @@ public class Player {
 
         RevoluteJoint leftHandLeftArm = new RevoluteJoint(leftArm, leftHand, new Vector2(stickman1x-wTrunk/2-wMember, stickman1y+hTrunk/2*0.75));
         world.addJoint(leftHandLeftArm);
+        joints.add(leftHandLeftArm);
 
         //HAND : right
         rightHand = new SimulationBody();
@@ -114,6 +129,7 @@ public class Player {
 
         RevoluteJoint rightArmRightHand = new RevoluteJoint(rightArm, rightHand, new Vector2(stickman1x+wTrunk/2+wMember, stickman1y+hTrunk/2*0.75));
         world.addJoint(rightArmRightHand);
+        joints.add(rightArmRightHand);
 
         //LEG : left
         leftLeg = new SimulationBody();
@@ -144,6 +160,7 @@ public class Player {
 
         RevoluteJoint leftFootLeftLeg = new RevoluteJoint(leftLeg, leftFoot, new Vector2(stickman1x-wTrunk/2-wMember, stickman1y-hTrunk/2));
         world.addJoint(leftFootLeftLeg);
+        joints.add(leftFootLeftLeg);
 
         //FOOT : right
         rightFoot = new SimulationBody();
@@ -156,6 +173,7 @@ public class Player {
 
         RevoluteJoint rightFootRightLeg = new RevoluteJoint(rightLeg, rightFoot, new Vector2(stickman1x+wTrunk/2+wMember, stickman1y-hTrunk/2));
         world.addJoint(rightFootRightLeg);
+        joints.add(rightFootRightLeg);
 
         /** JOINTS */
 
@@ -169,6 +187,7 @@ public class Player {
         trunkHead.setMaximumMotorTorque(0.0);
         trunkHead.setCollisionAllowed(false);
         world.addJoint(trunkHead);
+        joints.add(trunkHead);
 
         //TRUNK - ARM(left)
         RevoluteJoint trunkLeftArm = new RevoluteJoint(trunk, leftArm, new Vector2(stickman1x-wTrunk/2, stickman1y+hTrunk/2*0.75));
@@ -180,6 +199,7 @@ public class Player {
         trunkLeftArm.setMaximumMotorTorque(0.0);
         trunkLeftArm.setCollisionAllowed(false);
         world.addJoint(trunkLeftArm);
+        joints.add(trunkLeftArm);
 
         //TRUNK - ARM(right)
         RevoluteJoint trunkRightArm = new RevoluteJoint(trunk, rightArm, new Vector2(stickman1x+wTrunk/2, stickman1y+hTrunk/2*0.75));
@@ -191,6 +211,7 @@ public class Player {
         trunkRightArm.setMaximumMotorTorque(0.0);
         trunkRightArm.setCollisionAllowed(false);
         world.addJoint(trunkRightArm);
+        joints.add(trunkRightArm);
 
         //TRUNK - LEG(left)
         RevoluteJoint trunkLeftLeg = new RevoluteJoint(trunk, leftLeg, new Vector2(stickman1x-wTrunk/2, stickman1y-hTrunk/2));
@@ -202,6 +223,7 @@ public class Player {
         trunkLeftLeg.setMaximumMotorTorque(0.0);
         trunkLeftLeg.setCollisionAllowed(false);
         world.addJoint(trunkLeftLeg);
+        joints.add(trunkLeftLeg);
 
         //TRUNK - LEG(right)
         RevoluteJoint trunkRightLeg = new RevoluteJoint(trunk, rightLeg, new Vector2(stickman1x+wTrunk/2, stickman1y-hTrunk/2));
@@ -213,7 +235,61 @@ public class Player {
         trunkRightLeg.setMaximumMotorTorque(0.0);
         trunkRightLeg.setCollisionAllowed(false);
         world.addJoint(trunkRightLeg);
+        joints.add(trunkRightLeg);
     }
+
+    public void addDirection(boolean up, boolean down, boolean right, boolean left){
+        directionKeys[0] = (up | directionKeys[0]) & !down;
+        directionKeys[1] = (down | directionKeys[1]) & !up;
+        directionKeys[2] = (right | directionKeys[2]) & !left;
+        directionKeys[3] = (left | directionKeys[3]) & !right;
+        /*
+        System.out.println("add");
+        for(int i = 0; i < 4; i++){
+            System.out.print(directionKeys[i]);
+        }
+        System.out.println();
+        */
+        updateDirectionForce();
+    }
+
+    public void delDirection(boolean up, boolean down, boolean right, boolean left){
+        directionKeys[0] = (!up & directionKeys[0]);
+        directionKeys[1] = (!down & directionKeys[1]);
+        directionKeys[2] = (!right & directionKeys[2]);
+        directionKeys[3] = (!left & directionKeys[3]);
+        /*
+        System.out.println("del");
+        for(int i = 0; i < 4; i++){
+            System.out.print(directionKeys[i]);
+        }
+        System.out.println();
+        */
+        updateDirectionForce();
+    }
+
+    private void updateDirectionForce(){
+        float dVert = 0;
+        float dHor = 0;
+
+
+
+        if(directionKeys[0]){
+            dVert = force;
+        }else if(directionKeys[1]){
+            dVert = -force;
+        }
+
+        if(directionKeys[2]){
+            dHor = force;
+        }else if(directionKeys[3]){
+            dHor = -force;
+        }
+
+        this.getGravityCenter().applyForce(new Vector2(dHor, dVert));
+
+    }
+
 
     /**
      *  BODY : GRAVITY CENTER
@@ -258,6 +334,12 @@ public class Player {
             return BodyPartType.RIGHTFOOT;
 
         return BodyPartType.NONE;
+    }
+
+    public void demenbrate(){
+        for(RevoluteJoint joint : joints){
+            world.removeJoint(joint);
+        }
     }
 
 }

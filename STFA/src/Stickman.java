@@ -52,7 +52,7 @@ public class Stickman extends SimulationFrame{
             BodyFixture bf = new BodyFixture(c);
             floorbot.addFixture(bf);
         }
-        floorbot.translate(new Vector2(0.6875, -12.0));
+        floorbot.translate(new Vector2(0, -14.0));
         floorbot.setMass(MassType.INFINITE);
         world.addBody(floorbot);
 
@@ -63,7 +63,7 @@ public class Stickman extends SimulationFrame{
             BodyFixture bf = new BodyFixture(c);
             floortop.addFixture(bf);
         }
-        floortop.translate(new Vector2(3, 2.75));
+        floortop.translate(new Vector2(0, 2));
         floortop.setMass(MassType.INFINITE);
         world.addBody(floortop);
 
@@ -150,52 +150,19 @@ public class Stickman extends SimulationFrame{
             @Override
             public void keyReleased(KeyEvent e) {
                 // TODO Auto-generated method stub
-                switch (e.getKeyChar()){
-                    case('w'):
-                        stick1.keyStatments=stick1.keyStatments & 0x1;
-                        break;
-                }
-
+                stick2.delDirection((e.getKeyCode()==KeyEvent.VK_UP), (e.getKeyCode()==KeyEvent.VK_DOWN), (e.getKeyCode()==KeyEvent.VK_RIGHT), (e.getKeyCode()==KeyEvent.VK_LEFT));
+                stick1.delDirection((e.getKeyCode()==KeyEvent.VK_W), (e.getKeyCode()==KeyEvent.VK_S), (e.getKeyCode()==KeyEvent.VK_D), (e.getKeyCode()==KeyEvent.VK_A));
             }
 
             //KEY PRESSED -> USED
             @Override
             public void keyPressed(KeyEvent e) {
-
-                if (e.getKeyChar()=='w')
-                {
-                    stick1.keyStatments=stick1.keyStatments | 0x1;
-                }
-                if (e.getKeyChar()=='s')
-                {
-                    stick1.keyStatments=stick1.keyStatments | 0x2;
-                }
-                if (e.getKeyChar()=='a')
-                {
-                    stick1.keyStatments=stick1.keyStatments | 0x4;
-                }
-                if (e.getKeyChar()=='d')
-                {
-                    stick1.keyStatments=stick1.keyStatments | 0x8;
-                }
-
-                if (e.getKeyCode()==KeyEvent.VK_UP)
-                {
-                    control2.applyForce(new Vector2(0,300));
-                }
-                if (e.getKeyCode()==KeyEvent.VK_DOWN)
-                {
-                    control2.applyForce(new Vector2(0,-300));
-                }
-                if (e.getKeyCode()==KeyEvent.VK_LEFT)
-                {
-                    control2.applyForce(new Vector2(-300,0));
-                }
-                if (e.getKeyCode()==KeyEvent.VK_RIGHT)
-                {
-                    control2.applyForce(new Vector2(300,0));
-                }
+                stick2.addDirection((e.getKeyCode()==KeyEvent.VK_UP), (e.getKeyCode()==KeyEvent.VK_DOWN), (e.getKeyCode()==KeyEvent.VK_RIGHT), (e.getKeyCode()==KeyEvent.VK_LEFT));
+                stick1.delDirection((e.getKeyCode()==KeyEvent.VK_W), (e.getKeyCode()==KeyEvent.VK_S), (e.getKeyCode()==KeyEvent.VK_D), (e.getKeyCode()==KeyEvent.VK_A));
             }
+
+
+
         });
 
         /** COLLISIONS */
@@ -239,7 +206,7 @@ public class Stickman extends SimulationFrame{
         //test : check which body part is touched
         if(bpt1 != BodyPartType.NONE && bpt2 != BodyPartType.NONE){
 
-            System.out.println("Stickman 1 touched with " + bpt1 + " Stickman 2 at " + bpt2);
+            //System.out.println("Stickman 1 touched with " + bpt1 + " Stickman 2 at " + bpt2);
 
             //MANAGING COLLISIONABLE BODY PARTS
             //STICKMAN 1 vs STICKMAN 2
@@ -250,7 +217,7 @@ public class Stickman extends SimulationFrame{
                     bpt2 == BodyPartType.LEFTHAND || bpt2 == BodyPartType.RIGHTHAND ||
                     bpt2 == BodyPartType.LEFTFOOT || bpt2 == BodyPartType.RIGHTFOOT)) {
 
-                System.out.println("no damage");
+               //System.out.println("no damage");
             }
             //head - hand - foot vs other parts
             if((bpt1 == BodyPartType.HEAD ||
@@ -260,7 +227,7 @@ public class Stickman extends SimulationFrame{
                     bpt2 == BodyPartType.LEFTHAND || bpt2 == BodyPartType.RIGHTHAND ||
                     bpt2 == BodyPartType.LEFTFOOT || bpt2 == BodyPartType.RIGHTFOOT)) {
 
-                System.out.println("Stickman 1 inflicts damages to Stickman 2");
+                //System.out.println("Stickman 1 inflicts damages to Stickman 2");
             }
             //STICKMAN 2
             //head - hand - foot vs other parts
@@ -271,7 +238,7 @@ public class Stickman extends SimulationFrame{
                     bpt1 == BodyPartType.LEFTHAND || bpt1 == BodyPartType.RIGHTHAND ||
                     bpt1 == BodyPartType.LEFTFOOT || bpt1 == BodyPartType.RIGHTFOOT)) {
 
-                System.out.println("Stickman 2 inflicts damages to Stickman 1");
+                //System.out.println("Stickman 2 inflicts damages to Stickman 1");
             }
             return;
         }
