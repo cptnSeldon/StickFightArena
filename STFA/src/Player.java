@@ -40,9 +40,18 @@ public class Player {
     Body rightLeg;
     Body leftFoot;          //-> inflicts damage
     Body rightFoot;
+
+    //COLLISION DETECTION
     //life points
-    int lifePoints;
-    int maxLifePoints;
+    private int lifePoints;
+    private int maxLifePoints;
+    //damages
+    private int damageIn;
+    private int damageOut;
+    //collision state
+    private boolean isTouching;
+    //grab & throw state
+    private boolean isDragged;
 
 
     float force = 300;
@@ -62,9 +71,21 @@ public class Player {
     public Player(double stickman1x, double stickman1y, World world) {
         directionForce = new Vector2(0,0);
 
+
+        //BASIC SETTINGS
+        //initialization
         this.stickman1x = stickman1x;
         this.stickman1y = stickman1y;
         this.world = world;
+        //collision detection
+            //life points
+        this.maxLifePoints = 100;
+        this.lifePoints = this.maxLifePoints;
+            //damages
+        this.damageIn  = 0;
+        this.damageOut = 5;
+            //grab & throw state
+        this.isDragged = false;
 
         joints = new ArrayList<>();
 
@@ -290,6 +311,35 @@ public class Player {
 
     }
 
+
+    /**
+     *  SETTERs + GETTERs
+     */
+    //LIFE POINTS
+        //setter
+    public void setLifePoints(int points){ this.lifePoints = points; }
+        //getter
+    public int getLifePoints(){ return this.lifePoints; }
+    //LIFE POINTS : max
+        //setter -> if customization
+    public void setMaxLifePoints(int points){ this.maxLifePoints = points; }
+        //getter
+    public int getMaxLifePoints() { return this.maxLifePoints; }
+    //DAMAGES : out
+        //setter
+    public void setDamageOut(int damage) { this.damageOut = damage; }
+        //getter
+    public int getDamageOut(){ return this.damageOut; }
+    //COLLISION STATE
+        //setter
+    public void setPlayerTouched(boolean touched){ this.isTouching = touched; }
+        //getter
+    public boolean getPlayerTouched(){ return isTouching; }
+    //GRAB & THROW
+        //setter
+    public void setPlayerDraggedState(boolean draggedState){ this.isDragged = draggedState; }
+        //getter
+    public boolean playerIsDragged(){ return this.isDragged; }
 
     /**
      *  BODY : GRAVITY CENTER

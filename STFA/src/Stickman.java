@@ -2,8 +2,7 @@
  * Created by nolvulon on 25.04.2016.
  */
 
-import java.awt.Graphics2D;
-import java.awt.Point;
+import java.awt.*;
 import java.awt.RenderingHints.Key;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -29,8 +28,6 @@ public class Stickman extends SimulationFrame{
     //PLAYERS
     Player stick1;
     Player stick2;
-    //ELSE
-    private boolean isDragged =false;
 
     /**
      *  CONSTRUCTOR
@@ -173,6 +170,7 @@ public class Stickman extends SimulationFrame{
             public boolean collision(Body body, BodyFixture bodyFixture, Body body1, BodyFixture bodyFixture1) {
 
                 collisionManagement(body, body1);
+
                 return true;
             }
 
@@ -200,8 +198,12 @@ public class Stickman extends SimulationFrame{
      */
     private void collisionManagement(Body body0, Body body1) {
 
+        //INITIALIZATION
         BodyPartType bpt1 = stick1.getBodyPartType(body0);
         BodyPartType bpt2 = stick2.getBodyPartType(body1);
+        //basic settings
+        stick1.setPlayerTouched(false);
+        stick2.setPlayerTouched(false);
 
         //test : check which body part is touched
         if(bpt1 != BodyPartType.NONE && bpt2 != BodyPartType.NONE){
@@ -218,6 +220,7 @@ public class Stickman extends SimulationFrame{
                     bpt2 == BodyPartType.LEFTFOOT || bpt2 == BodyPartType.RIGHTFOOT)) {
 
                //System.out.println("no damage");
+
             }
             //head - hand - foot vs other parts
             if((bpt1 == BodyPartType.HEAD ||
@@ -228,7 +231,14 @@ public class Stickman extends SimulationFrame{
                     bpt2 == BodyPartType.LEFTFOOT || bpt2 == BodyPartType.RIGHTFOOT)) {
 
                 //System.out.println("Stickman 1 inflicts damages to Stickman 2");
+
+                //set touch - true
+                //stick1.setPlayerTouched(true);
+                //stick1.setLifePoints(stick1.getLifePoints() - stick2.getDamageOut());
+                //System.out.println("Stickman 1 Life : " + stick1.getLifePoints());
+
             }
+
             //STICKMAN 2
             //head - hand - foot vs other parts
             if((bpt2 == BodyPartType.HEAD ||
@@ -239,7 +249,18 @@ public class Stickman extends SimulationFrame{
                     bpt1 == BodyPartType.LEFTFOOT || bpt1 == BodyPartType.RIGHTFOOT)) {
 
                 //System.out.println("Stickman 2 inflicts damages to Stickman 1");
+
+                //set touch - true
+                //stick2.setPlayerTouched(true);
+                //stick2.setLifePoints(stick2.getLifePoints() - stick1.getDamageOut());
+                //System.out.println("Stickman 2 Life : " + stick1.getLifePoints());
+
             }
+
+            //TODO : new method allowing impulse customization
+            body0.applyImpulse(0.75);
+            body1.applyImpulse(0.75);
+
             return;
         }
 
