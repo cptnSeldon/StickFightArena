@@ -236,12 +236,46 @@ public class Stickman extends SimulationFrame{
         BodyPartType bpt1 = stick1.getBodyPartType(body0);
         BodyPartType bpt2 = stick2.getBodyPartType(body1);
 
-        //test : bpt1 != none & bpt2 != none
+        //test : check which body part is touched
         if(bpt1 != BodyPartType.NONE && bpt2 != BodyPartType.NONE){
 
             System.out.println("Stickman 1 touched with " + bpt1 + " Stickman 2 at " + bpt2);
+
+            //MANAGING COLLISIONABLE BODY PARTS
+            //STICKMAN 1 vs STICKMAN 2
+            //head - hand - foot vs head - hand - foot
+            if((bpt1 == BodyPartType.HEAD ||
+                    bpt1 == BodyPartType.LEFTHAND || bpt1 == BodyPartType.RIGHTHAND ||
+                    bpt1 == BodyPartType.LEFTFOOT || bpt1 == BodyPartType.RIGHTFOOT) && (bpt2 == BodyPartType.HEAD ||
+                    bpt2 == BodyPartType.LEFTHAND || bpt2 == BodyPartType.RIGHTHAND ||
+                    bpt2 == BodyPartType.LEFTFOOT || bpt2 == BodyPartType.RIGHTFOOT)) {
+
+                System.out.println("no damage");
+            }
+            //head - hand - foot vs other parts
+            if((bpt1 == BodyPartType.HEAD ||
+                    bpt1 == BodyPartType.LEFTHAND || bpt1 == BodyPartType.RIGHTHAND ||
+                    bpt1 == BodyPartType.LEFTFOOT || bpt1 == BodyPartType.RIGHTFOOT) &&
+                   !(bpt2 == BodyPartType.HEAD ||
+                    bpt2 == BodyPartType.LEFTHAND || bpt2 == BodyPartType.RIGHTHAND ||
+                    bpt2 == BodyPartType.LEFTFOOT || bpt2 == BodyPartType.RIGHTFOOT)) {
+
+                System.out.println("Stickman 1 inflicts damages to Stickman 2");
+            }
+            //STICKMAN 2
+            //head - hand - foot vs other parts
+            if((bpt2 == BodyPartType.HEAD ||
+                    bpt2 == BodyPartType.LEFTHAND || bpt2 == BodyPartType.RIGHTHAND ||
+                    bpt2 == BodyPartType.LEFTFOOT || bpt2 == BodyPartType.RIGHTFOOT) &&
+                   !(bpt1 == BodyPartType.HEAD ||
+                    bpt1 == BodyPartType.LEFTHAND || bpt1 == BodyPartType.RIGHTHAND ||
+                    bpt1 == BodyPartType.LEFTFOOT || bpt1 == BodyPartType.RIGHTFOOT)) {
+
+                System.out.println("Stickman 2 inflicts damages to Stickman 1");
+            }
             return;
         }
+
 
 
 

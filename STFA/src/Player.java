@@ -37,6 +37,9 @@ public class Player {
     Body rightLeg;
     Body leftFoot;          //-> inflicts damage
     Body rightFoot;
+    //life points
+    int lifePoints;
+    int maxLifePoints;
 
     //WORLD
     World world;
