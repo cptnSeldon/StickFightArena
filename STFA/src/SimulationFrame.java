@@ -43,6 +43,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import org.dyn4j.dynamics.World;
+import org.dyn4j.dynamics.Body;
 import org.dyn4j.geometry.Vector2;
 
 /**
@@ -223,6 +224,10 @@ public abstract class SimulationFrame extends JFrame {
         // Sync the display on some systems.
         // (on Linux, this fixes event queue problems)
         Toolkit.getDefaultToolkit().sync();
+
+        for(Body body : world.getBodies()){
+            ((SimulationBody) body).resetColor();
+        }
     }
 
     /**

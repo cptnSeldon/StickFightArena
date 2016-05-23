@@ -17,6 +17,27 @@ import org.dyn4j.geometry.Convex;
 public class SimulationBody extends Body {
     /** The color of the object */
     protected Color color;
+    protected Color initColor;
+
+    private long lastTouch;
+
+    public long getLastTouch() {
+        return lastTouch;
+    }
+
+    public void setLastTouch(long lastTouch) {
+        this.lastTouch = lastTouch;
+    }
+
+    public void resetColor(){
+
+
+        if((System.currentTimeMillis()-lastTouch)>750){
+            System.out.println(System.currentTimeMillis());
+            this.setColor(initColor);
+        }
+    }
+
 
     /**
      * Default constructor.
@@ -31,6 +52,7 @@ public class SimulationBody extends Body {
      * @param color a set color
      */
     public SimulationBody(Color color) {
+        this.initColor = color;
         this.color = color;
     }
 
@@ -88,6 +110,10 @@ public class SimulationBody extends Body {
         g.setTransform(ot);
     }
 
+    public void setColor(Color color){
+        this.color = color;
+    }
+
     /**
      * Renders the given fixture.
      * @param g the graphics object to render to
@@ -107,4 +133,6 @@ public class SimulationBody extends Body {
         // render the fixture
         Graphics2DRenderer.render(g, convex, scale, color);
     }
+
+
 }

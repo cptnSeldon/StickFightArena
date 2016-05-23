@@ -7,6 +7,8 @@ import org.dyn4j.geometry.Geometry;
 import org.dyn4j.geometry.MassType;
 import org.dyn4j.geometry.Vector2;
 
+import java.awt.Color;
+
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -41,6 +43,8 @@ public class Player {
     Body leftFoot;          //-> inflicts damage
     Body rightFoot;
 
+    Color color;
+
     //COLLISION DETECTION
     //life points
     private int lifePoints;
@@ -68,7 +72,7 @@ public class Player {
     /**
      * CONSTRUCTOR
      */
-    public Player(double stickman1x, double stickman1y, World world) {
+    public Player(double stickman1x, double stickman1y, World world, Color color) {
         directionForce = new Vector2(0,0);
 
 
@@ -91,7 +95,7 @@ public class Player {
 
         /** BODY ELEMENTS */
         //HEAD
-        head = new SimulationBody();
+        head = new SimulationBody(color);
         Convex c = Geometry.createCircle(rHead);
         BodyFixture bf = new BodyFixture(c);
         head.addFixture(bf);
@@ -100,7 +104,7 @@ public class Player {
         world.addBody(head);
 
         //TRUNK
-        trunk = new SimulationBody();
+        trunk = new SimulationBody(color);
         c = Geometry.createRectangle(wTrunk, hTrunk);
         bf = new BodyFixture(c);
         trunk.addFixture(bf);
@@ -109,7 +113,7 @@ public class Player {
         world.addBody(trunk);
 
         //ARM : left
-        leftArm = new SimulationBody();
+        leftArm = new SimulationBody(color);
         c = Geometry.createRectangle(wMember, hMember);
         bf = new BodyFixture(c);
         leftArm.addFixture(bf);
@@ -118,7 +122,7 @@ public class Player {
         world.addBody(leftArm);
 
         //ARM : right
-        rightArm = new SimulationBody();
+        rightArm = new SimulationBody(color);
         c = Geometry.createRectangle(wMember, hMember);
         bf = new BodyFixture(c);
         rightArm.addFixture(bf);
@@ -127,7 +131,7 @@ public class Player {
         world.addBody(rightArm);
 
         //HAND : left
-        leftHand = new SimulationBody();
+        leftHand = new SimulationBody(color);
         c = Geometry.createCircle(rHand);
         bf = new BodyFixture(c);
         leftHand.addFixture(bf);
@@ -140,7 +144,7 @@ public class Player {
         joints.add(leftHandLeftArm);
 
         //HAND : right
-        rightHand = new SimulationBody();
+        rightHand = new SimulationBody(color);
         c = Geometry.createCircle(rHand);
         bf = new BodyFixture(c);
         rightHand.addFixture(bf);
@@ -153,7 +157,7 @@ public class Player {
         joints.add(rightArmRightHand);
 
         //LEG : left
-        leftLeg = new SimulationBody();
+        leftLeg = new SimulationBody(color);
         c = Geometry.createRectangle(wMember, hMember);
         bf = new BodyFixture(c);
         leftLeg.addFixture(bf);
@@ -162,7 +166,7 @@ public class Player {
         world.addBody(leftLeg);
 
         //LEG : right
-        rightLeg = new SimulationBody();
+        rightLeg = new SimulationBody(color);
         c = Geometry.createRectangle(wMember, hMember);
         bf = new BodyFixture(c);
         rightLeg.addFixture(bf);
@@ -171,7 +175,7 @@ public class Player {
         world.addBody(rightLeg);
 
         //FOOT : left
-        leftFoot = new SimulationBody();
+        leftFoot = new SimulationBody(color);
         c = Geometry.createCircle(rHand);
         bf = new BodyFixture(c);
         leftFoot.addFixture(bf);
@@ -184,7 +188,7 @@ public class Player {
         joints.add(leftFootLeftLeg);
 
         //FOOT : right
-        rightFoot = new SimulationBody();
+        rightFoot = new SimulationBody(color);
         c = Geometry.createCircle(rHand);
         bf = new BodyFixture(c);
         rightFoot.addFixture(bf);
@@ -317,7 +321,10 @@ public class Player {
      */
     //LIFE POINTS
         //setter
-    public void setLifePoints(int points){ this.lifePoints = points; }
+    public void setLifePoints(int points){
+
+        this.lifePoints = points;
+    }
         //getter
     public int getLifePoints(){ return this.lifePoints; }
     //LIFE POINTS : max

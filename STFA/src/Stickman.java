@@ -21,6 +21,7 @@ import org.dyn4j.geometry.Convex;
 import org.dyn4j.geometry.Geometry;
 import org.dyn4j.geometry.MassType;
 import org.dyn4j.geometry.Vector2;
+import java.lang.System;
 
 public class Stickman extends SimulationFrame{
 
@@ -87,15 +88,15 @@ public class Stickman extends SimulationFrame{
         world.addBody(floorright);
 
         //STICKMAN : SETTINGS
-        double stickman1x = 1;
+        double stickman1x = -5;
         double stickman1y = 0;
 
         //PLAYER : 1
-        stick1 = new Player(stickman1x, stickman1y, world);
+        stick1 = new Player(stickman1x, stickman1y, world, new Color(0, 122, 60));
         Body control = stick1.getGravityCenter();
 
         //PLAYER : 2
-        stick2 = new Player(3,0.5, world);
+        stick2 = new Player(5,0.5, world, new Color(60, 30, 120));
         Body control2 = stick2.getGravityCenter();
 
         /** LISTENERS */
@@ -155,7 +156,7 @@ public class Stickman extends SimulationFrame{
             @Override
             public void keyPressed(KeyEvent e) {
                 stick2.addDirection((e.getKeyCode()==KeyEvent.VK_UP), (e.getKeyCode()==KeyEvent.VK_DOWN), (e.getKeyCode()==KeyEvent.VK_RIGHT), (e.getKeyCode()==KeyEvent.VK_LEFT));
-                stick1.delDirection((e.getKeyCode()==KeyEvent.VK_W), (e.getKeyCode()==KeyEvent.VK_S), (e.getKeyCode()==KeyEvent.VK_D), (e.getKeyCode()==KeyEvent.VK_A));
+                stick1.addDirection((e.getKeyCode()==KeyEvent.VK_W), (e.getKeyCode()==KeyEvent.VK_S), (e.getKeyCode()==KeyEvent.VK_D), (e.getKeyCode()==KeyEvent.VK_A));
             }
 
 
@@ -198,6 +199,8 @@ public class Stickman extends SimulationFrame{
      */
     private void collisionManagement(Body body0, Body body1) {
 
+
+
         //INITIALIZATION
         BodyPartType bpt1 = stick1.getBodyPartType(body0);
         BodyPartType bpt2 = stick2.getBodyPartType(body1);
@@ -207,6 +210,12 @@ public class Stickman extends SimulationFrame{
 
         //test : check which body part is touched
         if(bpt1 != BodyPartType.NONE && bpt2 != BodyPartType.NONE){
+
+            SimulationBody sBody0 = (SimulationBody)body0;
+            SimulationBody sBody1 = (SimulationBody)body1;
+
+
+
 
             //System.out.println("Stickman 1 touched with " + bpt1 + " Stickman 2 at " + bpt2);
 
@@ -230,6 +239,13 @@ public class Stickman extends SimulationFrame{
                     bpt2 == BodyPartType.LEFTHAND || bpt2 == BodyPartType.RIGHTHAND ||
                     bpt2 == BodyPartType.LEFTFOOT || bpt2 == BodyPartType.RIGHTFOOT)) {
 
+                if((System.currentTimeMillis()-sBody1.getLastTouch())>750){
+                    sBody1.setLastTouch(System.currentTimeMillis());
+                    sBody1.setColor(Color.RED);
+                }
+
+
+
                 //System.out.println("Stickman 1 inflicts damages to Stickman 2");
 
                 //set touch - true
@@ -247,6 +263,11 @@ public class Stickman extends SimulationFrame{
                    !(bpt1 == BodyPartType.HEAD ||
                     bpt1 == BodyPartType.LEFTHAND || bpt1 == BodyPartType.RIGHTHAND ||
                     bpt1 == BodyPartType.LEFTFOOT || bpt1 == BodyPartType.RIGHTFOOT)) {
+
+                if((System.currentTimeMillis()-sBody0.getLastTouch())>750){
+                    sBody0.setLastTouch(System.currentTimeMillis());
+                    sBody0.setColor(Color.RED);
+                }
 
                 //System.out.println("Stickman 2 inflicts damages to Stickman 1");
 
