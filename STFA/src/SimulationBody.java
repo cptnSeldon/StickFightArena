@@ -33,7 +33,6 @@ public class SimulationBody extends Body {
 
 
         if((System.currentTimeMillis()-lastTouch)>750){
-            System.out.println(System.currentTimeMillis());
             this.setColor(initColor);
         }
     }
