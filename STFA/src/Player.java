@@ -11,6 +11,8 @@ import java.awt.Color;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Player {
 
@@ -43,6 +45,7 @@ public class Player {
     Body leftFoot;          //-> inflicts damage
     Body rightFoot;
 
+
     Color color;
 
     //COLLISION DETECTION
@@ -56,6 +59,12 @@ public class Player {
     private boolean isTouching;
     //grab & throw state
     private boolean isDragged;
+
+    private boolean isAlive=true;
+    private boolean isVulnerable = true;
+    private long unvulnerabilityTime = 100;
+
+    private Timer vulnerableTimer;
 
 
     float force = 300;
@@ -74,8 +83,8 @@ public class Player {
      */
     public Player(double stickman1x, double stickman1y, World world, Color color) {
         directionForce = new Vector2(0,0);
-
-
+        this.vulnerableTimer = new Timer();
+        this.color=color;
         //BASIC SETTINGS
         //initialization
         this.stickman1x = stickman1x;
@@ -393,10 +402,34 @@ public class Player {
         return BodyPartType.NONE;
     }
 
-    public void demenbrate(){
+    public void demembrate(){
         for(RevoluteJoint joint : joints){
             world.removeJoint(joint);
         }
     }
 
+    public boolean IsAlive(){return isAlive;}
+    public boolean IsVulnerable(){return isVulnerable;}
+    public void applyDamage(int dmg, SimulationBody touchedBody){
+
+        this.lifePoints-=dmg;
+        if(lifePoints<=0) {
+            this.lifePoints = 0;
+            isAlive=false;
+            this.demembrate();
+            System.out.println("player dead");
+        }else
+        {
+            isVulnerable=false;
+            Color oldColor = touchedBody.getColor();
+            touchedBody.setColor(Color.RED);
+            this.vulnerableTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    touchedBody.setColor(oldColor);
+                    isVulnerable=true;
+                }
+            },this.unvulnerabilityTime);
+        }
+    }
 }

@@ -170,7 +170,9 @@ public class Stickman extends SimulationFrame{
             @Override
             public boolean collision(Body body, BodyFixture bodyFixture, Body body1, BodyFixture bodyFixture1) {
 
-                collisionManagement(body, body1);
+                if(stick1.IsAlive() && stick2.IsAlive()) {
+                    collisionManagement(body, body1);
+                }
 
                 return true;
             }
@@ -199,83 +201,46 @@ public class Stickman extends SimulationFrame{
      */
     private void collisionManagement(Body body0, Body body1) {
 
-
-
         //INITIALIZATION
-        BodyPartType bpt1 = stick1.getBodyPartType(body0);
-        BodyPartType bpt2 = stick2.getBodyPartType(body1);
-        //basic settings
-        stick1.setPlayerTouched(false);
-        stick2.setPlayerTouched(false);
+        BodyPartType bpt0 = stick1.getBodyPartType(body0);
+        BodyPartType bpt1 = stick2.getBodyPartType(body1);
 
+        //TODO : refactor to create a unique method
         //test : check which body part is touched
-        if(bpt1 != BodyPartType.NONE && bpt2 != BodyPartType.NONE){
+        if(bpt0 != BodyPartType.NONE && bpt1 != BodyPartType.NONE){
 
             SimulationBody sBody0 = (SimulationBody)body0;
             SimulationBody sBody1 = (SimulationBody)body1;
 
+            //System.out.println("Stickman 1 touched with " + bpt0 + " Stickman 2 at " + bpt1);
 
-
-
-            //System.out.println("Stickman 1 touched with " + bpt1 + " Stickman 2 at " + bpt2);
-
-            //MANAGING COLLISIONABLE BODY PARTS
-            //STICKMAN 1 vs STICKMAN 2
-            //head - hand - foot vs head - hand - foot
-            if((bpt1 == BodyPartType.HEAD ||
-                    bpt1 == BodyPartType.LEFTHAND || bpt1 == BodyPartType.RIGHTHAND ||
-                    bpt1 == BodyPartType.LEFTFOOT || bpt1 == BodyPartType.RIGHTFOOT) && (bpt2 == BodyPartType.HEAD ||
-                    bpt2 == BodyPartType.LEFTHAND || bpt2 == BodyPartType.RIGHTHAND ||
-                    bpt2 == BodyPartType.LEFTFOOT || bpt2 == BodyPartType.RIGHTFOOT)) {
-
-               //System.out.println("no damage");
-
-            }
             //head - hand - foot vs other parts
-            if((bpt1 == BodyPartType.HEAD ||
+            if(stick1.IsVulnerable() && ((bpt0 == BodyPartType.HEAD ||
+                    bpt0 == BodyPartType.LEFTHAND || bpt0 == BodyPartType.RIGHTHAND ||
+                    bpt0 == BodyPartType.LEFTFOOT || bpt0 == BodyPartType.RIGHTFOOT) &&
+                   !(bpt1 == BodyPartType.HEAD ||
                     bpt1 == BodyPartType.LEFTHAND || bpt1 == BodyPartType.RIGHTHAND ||
-                    bpt1 == BodyPartType.LEFTFOOT || bpt1 == BodyPartType.RIGHTFOOT) &&
-                   !(bpt2 == BodyPartType.HEAD ||
-                    bpt2 == BodyPartType.LEFTHAND || bpt2 == BodyPartType.RIGHTHAND ||
-                    bpt2 == BodyPartType.LEFTFOOT || bpt2 == BodyPartType.RIGHTFOOT)) {
-
-                if((System.currentTimeMillis()-sBody1.getLastTouch())>750){
-                    sBody1.setLastTouch(System.currentTimeMillis());
-                    sBody1.setColor(Color.RED);
-                }
+                    bpt1 == BodyPartType.LEFTFOOT || bpt1 == BodyPartType.RIGHTFOOT))) {
 
 
+                stick1.applyDamage(stick2.getDamageOut(), sBody1);
+                System.out.println("Stickman 1 Life : " + stick1.getLifePoints());
 
                 //System.out.println("Stickman 1 inflicts damages to Stickman 2");
-
-                //set touch - true
-                //stick1.setPlayerTouched(true);
-                //stick1.setLifePoints(stick1.getLifePoints() - stick2.getDamageOut());
-                //System.out.println("Stickman 1 Life : " + stick1.getLifePoints());
-
             }
 
             //STICKMAN 2
             //head - hand - foot vs other parts
-            if((bpt2 == BodyPartType.HEAD ||
-                    bpt2 == BodyPartType.LEFTHAND || bpt2 == BodyPartType.RIGHTHAND ||
-                    bpt2 == BodyPartType.LEFTFOOT || bpt2 == BodyPartType.RIGHTFOOT) &&
-                   !(bpt1 == BodyPartType.HEAD ||
+            if(stick2.IsVulnerable()&& ((bpt1 == BodyPartType.HEAD ||
                     bpt1 == BodyPartType.LEFTHAND || bpt1 == BodyPartType.RIGHTHAND ||
-                    bpt1 == BodyPartType.LEFTFOOT || bpt1 == BodyPartType.RIGHTFOOT)) {
+                    bpt1 == BodyPartType.LEFTFOOT || bpt1 == BodyPartType.RIGHTFOOT) &&
+                   !(bpt0 == BodyPartType.HEAD ||
+                    bpt0 == BodyPartType.LEFTHAND || bpt0 == BodyPartType.RIGHTHAND ||
+                    bpt0 == BodyPartType.LEFTFOOT || bpt0 == BodyPartType.RIGHTFOOT))) {
 
-                if((System.currentTimeMillis()-sBody0.getLastTouch())>750){
-                    sBody0.setLastTouch(System.currentTimeMillis());
-                    sBody0.setColor(Color.RED);
-                }
 
-                //System.out.println("Stickman 2 inflicts damages to Stickman 1");
-
-                //set touch - true
-                //stick2.setPlayerTouched(true);
-                //stick2.setLifePoints(stick2.getLifePoints() - stick1.getDamageOut());
-                //System.out.println("Stickman 2 Life : " + stick1.getLifePoints());
-
+                stick2.applyDamage(stick1.getDamageOut(),sBody0);
+                System.out.println("Stickman 2 Life : " + stick2.getLifePoints());
             }
 
             //TODO : new method allowing impulse customization
@@ -284,13 +249,9 @@ public class Stickman extends SimulationFrame{
 
             return;
         }
-
-
-
-
-
-
     }
+
+
 
     /**
      *  MOVE BODY TO POINTER
