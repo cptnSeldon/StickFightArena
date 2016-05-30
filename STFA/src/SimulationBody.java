@@ -8,12 +8,7 @@ import org.dyn4j.dynamics.BodyFixture;
 //import org.dyn4j.examples.Graphics2DRenderer;
 import org.dyn4j.geometry.Convex;
 
-/**
- * Custom Body class to add drawing functionality.
- * @author William Bittle
- * @version 3.2.1
- * @since 3.0.0
- */
+
 public class SimulationBody extends Body {
     /** The color of the object */
     protected Color color;

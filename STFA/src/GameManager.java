@@ -49,7 +49,7 @@ import org.dyn4j.geometry.Vector2;
 /**
  * SIMULATION FRAME class
  */
-public abstract class SimulationFrame extends JFrame {
+public abstract class GameManager extends JFrame {
 
     /** ATTIBUTES */
     //serial version id
@@ -76,7 +76,7 @@ public abstract class SimulationFrame extends JFrame {
      * @param name the frame name
      * @param scale the pixels per meter scale factor
      */
-    public SimulationFrame(String name, double scale) {
+    public GameManager(String name, double scale) {
         super(name);
 
         // set the scale
