@@ -41,7 +41,7 @@ public class Game extends GameManager {
 
         /** FLOORS */
         //BOTTOM
-        Body floorbot = new SimulationBody();{
+        Body floorbot = new BodyRenderer();{
 
             Convex c = Geometry.createRectangle(100.0, 1.0);
             BodyFixture bf = new BodyFixture(c);
@@ -52,7 +52,7 @@ public class Game extends GameManager {
         world.addBody(floorbot);
 
         //TOP
-        Body floortop = new SimulationBody();{
+        Body floortop = new BodyRenderer();{
 
             Convex c = Geometry.createRectangle(100.0, 1.0);
             BodyFixture bf = new BodyFixture(c);
@@ -63,7 +63,7 @@ public class Game extends GameManager {
         world.addBody(floortop);
 
         //LEFT
-        Body floorleft = new SimulationBody();{
+        Body floorleft = new BodyRenderer();{
 
             Convex c = Geometry.createRectangle(1.0, 100.0);
             BodyFixture bf = new BodyFixture(c);
@@ -74,7 +74,7 @@ public class Game extends GameManager {
         world.addBody(floorleft);
 
         //RIGHT
-        Body floorright = new SimulationBody();{
+        Body floorright = new BodyRenderer();{
 
             Convex c = Geometry.createRectangle(1.0, 100.0);
             BodyFixture bf = new BodyFixture(c);
@@ -203,8 +203,8 @@ public class Game extends GameManager {
         //test : check which body part is touched
         if(bpt0 != BodyPartType.NONE && bpt1 != BodyPartType.NONE){
 
-            SimulationBody sBody0 = (SimulationBody)body0;
-            SimulationBody sBody1 = (SimulationBody)body1;
+            BodyRenderer sBody0 = (BodyRenderer)body0;
+            BodyRenderer sBody1 = (BodyRenderer)body1;
 
             //System.out.println("Game 1 touched with " + bpt0 + " Game 2 at " + bpt1);
 

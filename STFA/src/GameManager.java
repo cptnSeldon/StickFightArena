@@ -30,7 +30,6 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowAdapter;
@@ -43,8 +42,6 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import org.dyn4j.dynamics.World;
-import org.dyn4j.dynamics.Body;
-import org.dyn4j.geometry.Vector2;
 
 /**
  * SIMULATION FRAME class
@@ -270,7 +267,7 @@ public abstract class GameManager extends JFrame {
         // draw all the objects in the world
         for (int i = 0; i < this.world.getBodyCount(); i++) {
             // get the object
-            SimulationBody body = (SimulationBody) this.world.getBody(i);
+            BodyRenderer body = (BodyRenderer) this.world.getBody(i);
             this.render(g, elapsedTime, body);
         }
     }
@@ -281,7 +278,7 @@ public abstract class GameManager extends JFrame {
      * @param elapsedTime the elapsed time from the last update
      * @param body the body to render
      */
-    protected void render(Graphics2D g, double elapsedTime, SimulationBody body) {
+    protected void render(Graphics2D g, double elapsedTime, BodyRenderer body) {
         // draw the object
         body.render(g, this.scale);
     }

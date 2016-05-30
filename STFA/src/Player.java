@@ -104,7 +104,7 @@ public class Player {
 
         /** BODY ELEMENTS */
         //HEAD
-        head = new SimulationBody(color);
+        head = new BodyRenderer(color);
         Convex c = Geometry.createCircle(rHead);
         BodyFixture bf = new BodyFixture(c);
         head.addFixture(bf);
@@ -113,7 +113,7 @@ public class Player {
         world.addBody(head);
 
         //TRUNK
-        trunk = new SimulationBody(color);
+        trunk = new BodyRenderer(color);
         c = Geometry.createRectangle(wTrunk, hTrunk);
         bf = new BodyFixture(c);
         trunk.addFixture(bf);
@@ -122,7 +122,7 @@ public class Player {
         world.addBody(trunk);
 
         //ARM : left
-        leftArm = new SimulationBody(color);
+        leftArm = new BodyRenderer(color);
         c = Geometry.createRectangle(wMember, hMember);
         bf = new BodyFixture(c);
         leftArm.addFixture(bf);
@@ -131,7 +131,7 @@ public class Player {
         world.addBody(leftArm);
 
         //ARM : right
-        rightArm = new SimulationBody(color);
+        rightArm = new BodyRenderer(color);
         c = Geometry.createRectangle(wMember, hMember);
         bf = new BodyFixture(c);
         rightArm.addFixture(bf);
@@ -140,7 +140,7 @@ public class Player {
         world.addBody(rightArm);
 
         //HAND : left
-        leftHand = new SimulationBody(color);
+        leftHand = new BodyRenderer(color);
         c = Geometry.createCircle(rHand);
         bf = new BodyFixture(c);
         leftHand.addFixture(bf);
@@ -153,7 +153,7 @@ public class Player {
         joints.add(leftHandLeftArm);
 
         //HAND : right
-        rightHand = new SimulationBody(color);
+        rightHand = new BodyRenderer(color);
         c = Geometry.createCircle(rHand);
         bf = new BodyFixture(c);
         rightHand.addFixture(bf);
@@ -166,7 +166,7 @@ public class Player {
         joints.add(rightArmRightHand);
 
         //LEG : left
-        leftLeg = new SimulationBody(color);
+        leftLeg = new BodyRenderer(color);
         c = Geometry.createRectangle(wMember, hMember);
         bf = new BodyFixture(c);
         leftLeg.addFixture(bf);
@@ -175,7 +175,7 @@ public class Player {
         world.addBody(leftLeg);
 
         //LEG : right
-        rightLeg = new SimulationBody(color);
+        rightLeg = new BodyRenderer(color);
         c = Geometry.createRectangle(wMember, hMember);
         bf = new BodyFixture(c);
         rightLeg.addFixture(bf);
@@ -184,7 +184,7 @@ public class Player {
         world.addBody(rightLeg);
 
         //FOOT : left
-        leftFoot = new SimulationBody(color);
+        leftFoot = new BodyRenderer(color);
         c = Geometry.createCircle(rHand);
         bf = new BodyFixture(c);
         leftFoot.addFixture(bf);
@@ -197,7 +197,7 @@ public class Player {
         joints.add(leftFootLeftLeg);
 
         //FOOT : right
-        rightFoot = new SimulationBody(color);
+        rightFoot = new BodyRenderer(color);
         c = Geometry.createCircle(rHand);
         bf = new BodyFixture(c);
         rightFoot.addFixture(bf);
@@ -429,7 +429,7 @@ public class Player {
     /**
      *  APPLY DAMAGE
      */
-    public void applyDamage(int dmg, SimulationBody touchedBody){
+    public void applyDamage(int dmg, BodyRenderer touchedBody){
 
         this.lifePoints-=dmg;
         if(lifePoints<=0) {
