@@ -3,12 +3,10 @@
  */
 
 import java.awt.*;
-import java.awt.RenderingHints.Key;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 
 import org.dyn4j.collision.manifold.Manifold;
 import org.dyn4j.collision.narrowphase.Penetration;
@@ -16,14 +14,13 @@ import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.BodyFixture;
 import org.dyn4j.dynamics.CollisionListener;
 import org.dyn4j.dynamics.contact.ContactConstraint;
-import org.dyn4j.dynamics.joint.RevoluteJoint;
 import org.dyn4j.geometry.Convex;
 import org.dyn4j.geometry.Geometry;
 import org.dyn4j.geometry.MassType;
 import org.dyn4j.geometry.Vector2;
 import java.lang.System;
 
-public class Stickman extends SimulationFrame{
+public class Game extends GameManager {
 
     /** ATTRIBUTES */
     //PLAYERS
@@ -33,8 +30,8 @@ public class Stickman extends SimulationFrame{
     /**
      *  CONSTRUCTOR
      */
-    Stickman(double scale){
-        super("Stickman" , scale);
+    Game(double scale){
+        super("Game" , scale);
     }
 
     /**
@@ -159,8 +156,6 @@ public class Stickman extends SimulationFrame{
                 stick1.addDirection((e.getKeyCode()==KeyEvent.VK_W), (e.getKeyCode()==KeyEvent.VK_S), (e.getKeyCode()==KeyEvent.VK_D), (e.getKeyCode()==KeyEvent.VK_A));
             }
 
-
-
         });
 
         /** COLLISIONS */
@@ -173,7 +168,6 @@ public class Stickman extends SimulationFrame{
                 if(stick1.IsAlive() && stick2.IsAlive()) {
                     collisionManagement(body, body1);
                 }
-
                 return true;
             }
 
@@ -212,7 +206,7 @@ public class Stickman extends SimulationFrame{
             SimulationBody sBody0 = (SimulationBody)body0;
             SimulationBody sBody1 = (SimulationBody)body1;
 
-            //System.out.println("Stickman 1 touched with " + bpt0 + " Stickman 2 at " + bpt1);
+            //System.out.println("Game 1 touched with " + bpt0 + " Game 2 at " + bpt1);
 
             //head - hand - foot vs other parts
             if(stick1.IsVulnerable() && ((bpt0 == BodyPartType.HEAD ||
@@ -224,9 +218,9 @@ public class Stickman extends SimulationFrame{
 
 
                 stick1.applyDamage(stick2.getDamageOut(), sBody1);
-                System.out.println("Stickman 1 Life : " + stick1.getLifePoints());
+                System.out.println("Game 1 Life : " + stick1.getLifePoints());
 
-                //System.out.println("Stickman 1 inflicts damages to Stickman 2");
+                //System.out.println("Game 1 inflicts damages to Game 2");
             }
 
             //STICKMAN 2
@@ -240,7 +234,7 @@ public class Stickman extends SimulationFrame{
 
 
                 stick2.applyDamage(stick1.getDamageOut(),sBody0);
-                System.out.println("Stickman 2 Life : " + stick2.getLifePoints());
+                System.out.println("Game 2 Life : " + stick2.getLifePoints());
             }
 
             //TODO : new method allowing impulse customization
@@ -281,7 +275,7 @@ public class Stickman extends SimulationFrame{
 
     /** MAIN */
     public static void main(String[] args) {
-        Stickman simulation = new Stickman(50);
+        Game simulation = new Game(50);
 
         simulation.run();
     }
