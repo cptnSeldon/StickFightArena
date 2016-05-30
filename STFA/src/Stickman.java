@@ -27,8 +27,8 @@ public class Stickman extends SimulationFrame{
 
     /** ATTRIBUTES */
     //PLAYERS
-    Player stick1;
-    Player stick2;
+    public Player stick1;
+    public Player stick2;
 
     /**
      *  CONSTRUCTOR

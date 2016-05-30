@@ -23,7 +23,7 @@ public class SimulationBody extends Body {
      * Default constructor.
      */
     public SimulationBody() {
-        // randomly generate the color
+        // black
         this.color = new Color(0,0,0);
     }
 

@@ -272,6 +272,9 @@ public class Player {
         joints.add(trunkRightLeg);
     }
 
+    /**
+     *  ADD DIRECTION
+     */
     public void addDirection(boolean up, boolean down, boolean right, boolean left){
         directionKeys[0] = (up | directionKeys[0]) & !down;
         directionKeys[1] = (down | directionKeys[1]) & !up;
@@ -287,6 +290,9 @@ public class Player {
         updateDirectionForce();
     }
 
+    /**
+     *  DELETE DIRECTION
+     */
     public void delDirection(boolean up, boolean down, boolean right, boolean left){
         directionKeys[0] = (!up & directionKeys[0]);
         directionKeys[1] = (!down & directionKeys[1]);
@@ -302,6 +308,9 @@ public class Player {
         updateDirectionForce();
     }
 
+    /**
+     *  UPDATE DIRECTION FORCE
+     */
     private void updateDirectionForce(){
         float dVert = 0;
         float dHor = 0;
@@ -402,14 +411,24 @@ public class Player {
         return BodyPartType.NONE;
     }
 
+    /**
+     *  DEMEMBRATE : when end of game
+     */
     public void demembrate(){
         for(RevoluteJoint joint : joints){
             world.removeJoint(joint);
         }
     }
 
+    /**
+     *  TESTS : life, vulnerability
+     */
     public boolean IsAlive(){return isAlive;}
     public boolean IsVulnerable(){return isVulnerable;}
+
+    /**
+     *  APPLY DAMAGE
+     */
     public void applyDamage(int dmg, SimulationBody touchedBody){
 
         this.lifePoints-=dmg;
