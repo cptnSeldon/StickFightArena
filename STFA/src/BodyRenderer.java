@@ -9,7 +9,8 @@ import org.dyn4j.dynamics.BodyFixture;
 import org.dyn4j.geometry.Convex;
 
 
-public class SimulationBody extends Body {
+public class BodyRenderer extends Body {
+
     /** The color of the object */
     protected Color color;
     protected Color initColor;
@@ -34,7 +35,7 @@ public class SimulationBody extends Body {
     /**
      * Default constructor.
      */
-    public SimulationBody() {
+    public BodyRenderer() {
         // black
         this.color = new Color(0,0,0);
     }
@@ -43,7 +44,7 @@ public class SimulationBody extends Body {
      * Constructor.
      * @param color a set color
      */
-    public SimulationBody(Color color) {
+    public BodyRenderer(Color color) {
         this.initColor = color;
         this.color = color;
     }

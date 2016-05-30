@@ -20,7 +20,8 @@ import org.dyn4j.geometry.MassType;
 import org.dyn4j.geometry.Vector2;
 import java.lang.System;
 
-public class Stickman extends GameManager {
+public class Game extends GameManager {
+
 
     /** ATTRIBUTES */
     //PLAYERS
@@ -30,8 +31,8 @@ public class Stickman extends GameManager {
     /**
      *  CONSTRUCTOR
      */
-    Stickman(double scale){
-        super("Stickman" , scale);
+    Game(double scale){
+        super("Game" , scale);
     }
 
     /**
@@ -41,7 +42,7 @@ public class Stickman extends GameManager {
 
         /** FLOORS */
         //BOTTOM
-        Body floorbot = new SimulationBody();{
+        Body floorbot = new BodyRenderer();{
 
             Convex c = Geometry.createRectangle(100.0, 1.0);
             BodyFixture bf = new BodyFixture(c);
@@ -52,7 +53,7 @@ public class Stickman extends GameManager {
         world.addBody(floorbot);
 
         //TOP
-        Body floortop = new SimulationBody();{
+        Body floortop = new BodyRenderer();{
 
             Convex c = Geometry.createRectangle(100.0, 1.0);
             BodyFixture bf = new BodyFixture(c);
@@ -63,7 +64,7 @@ public class Stickman extends GameManager {
         world.addBody(floortop);
 
         //LEFT
-        Body floorleft = new SimulationBody();{
+        Body floorleft = new BodyRenderer();{
 
             Convex c = Geometry.createRectangle(1.0, 100.0);
             BodyFixture bf = new BodyFixture(c);
@@ -74,7 +75,7 @@ public class Stickman extends GameManager {
         world.addBody(floorleft);
 
         //RIGHT
-        Body floorright = new SimulationBody();{
+        Body floorright = new BodyRenderer();{
 
             Convex c = Geometry.createRectangle(1.0, 100.0);
             BodyFixture bf = new BodyFixture(c);
@@ -156,8 +157,6 @@ public class Stickman extends GameManager {
                 stick1.addDirection((e.getKeyCode()==KeyEvent.VK_W), (e.getKeyCode()==KeyEvent.VK_S), (e.getKeyCode()==KeyEvent.VK_D), (e.getKeyCode()==KeyEvent.VK_A));
             }
 
-
-
         });
 
         /** COLLISIONS */
@@ -170,7 +169,6 @@ public class Stickman extends GameManager {
                 if(stick1.IsAlive() && stick2.IsAlive()) {
                     collisionManagement(body, body1);
                 }
-
                 return true;
             }
 
@@ -206,10 +204,10 @@ public class Stickman extends GameManager {
         //test : check which body part is touched
         if(bpt0 != BodyPartType.NONE && bpt1 != BodyPartType.NONE){
 
-            SimulationBody sBody0 = (SimulationBody)body0;
-            SimulationBody sBody1 = (SimulationBody)body1;
+            BodyRenderer sBody0 = (BodyRenderer)body0;
+            BodyRenderer sBody1 = (BodyRenderer)body1;
 
-            //System.out.println("Stickman 1 touched with " + bpt0 + " Stickman 2 at " + bpt1);
+            //System.out.println("Game 1 touched with " + bpt0 + " Game 2 at " + bpt1);
 
             //head - hand - foot vs other parts
             if(stick1.IsVulnerable() && ((bpt0 == BodyPartType.HEAD ||
@@ -221,9 +219,9 @@ public class Stickman extends GameManager {
 
 
                 stick1.applyDamage(stick2.getDamageOut(), sBody1);
-                System.out.println("Stickman 1 Life : " + stick1.getLifePoints());
+                System.out.println("Game 1 Life : " + stick1.getLifePoints());
 
-                //System.out.println("Stickman 1 inflicts damages to Stickman 2");
+                //System.out.println("Game 1 inflicts damages to Game 2");
             }
 
             //STICKMAN 2
@@ -237,7 +235,7 @@ public class Stickman extends GameManager {
 
 
                 stick2.applyDamage(stick1.getDamageOut(),sBody0);
-                System.out.println("Stickman 2 Life : " + stick2.getLifePoints());
+                System.out.println("Game 2 Life : " + stick2.getLifePoints());
             }
 
             //TODO : new method allowing impulse customization
@@ -278,7 +276,7 @@ public class Stickman extends GameManager {
 
     /** MAIN */
     public static void main(String[] args) {
-        Stickman simulation = new Stickman(50);
+        Game simulation = new Game(50);
 
         simulation.run();
     }
