@@ -19,6 +19,23 @@ public class SimulationBody extends Body {
     protected Color color;
     protected Color initColor;
 
+    private long lastTouch;
+
+    public long getLastTouch() {
+        return lastTouch;
+    }
+
+    public void setLastTouch(long lastTouch) {
+        this.lastTouch = lastTouch;
+    }
+
+    public void resetColor(){
+
+
+        if((System.currentTimeMillis()-lastTouch)>750){
+            this.setColor(initColor);
+        }
+    }
     /**
      * Default constructor.
      */
