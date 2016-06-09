@@ -17,7 +17,9 @@ import org.dyn4j.dynamics.contact.ContactConstraint;
 import org.dyn4j.geometry.Convex;
 import org.dyn4j.geometry.Geometry;
 import org.dyn4j.geometry.MassType;
+import org.dyn4j.geometry.TextShape;
 import org.dyn4j.geometry.Vector2;
+
 import java.lang.System;
 
 public class Game extends GameManager {
@@ -94,9 +96,16 @@ public class Game extends GameManager {
         Body control = stick1.getGravityCenter();
 
         //PLAYER : 2
-        stick2 = new Player(5,0.5, world, new Color(60, 30, 120));
+        stick2 = new Player(5,0, world, new Color(60, 30, 120));
         Body control2 = stick2.getGravityCenter();
 
+        BodyRenderer br = new BodyRenderer(Color.GREEN);
+		br.addFixture(new TextShape(6.75,1.5,30,"Player 1"));
+        world.addBody(br);
+        
+        BodyRenderer br2 = new BodyRenderer(Color.GREEN);
+		br2.addFixture(new TextShape(16.75,1.5,30,"Player 2"));
+        world.addBody(br2);
         /** LISTENERS */
         //MOUSE LISTENER
         this.addMouseListenerToCanvas(new MouseListener() {
@@ -145,7 +154,9 @@ public class Game extends GameManager {
             //RELEASED -> USED
             @Override
             public void keyReleased(KeyEvent e) {
-                // TODO Auto-generated method stub
+                //IN GAME
+
+                //PLAYER
                 stick2.delDirection((e.getKeyCode()==KeyEvent.VK_UP), (e.getKeyCode()==KeyEvent.VK_DOWN), (e.getKeyCode()==KeyEvent.VK_RIGHT), (e.getKeyCode()==KeyEvent.VK_LEFT));
                 stick1.delDirection((e.getKeyCode()==KeyEvent.VK_W), (e.getKeyCode()==KeyEvent.VK_S), (e.getKeyCode()==KeyEvent.VK_D), (e.getKeyCode()==KeyEvent.VK_A));
             }
@@ -153,8 +164,23 @@ public class Game extends GameManager {
             //KEY PRESSED -> USED
             @Override
             public void keyPressed(KeyEvent e) {
+                //IN GAME
+                //paused game
+                if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
+
+                    if(!isPaused()){
+                        pause();
+                     }
+
+                    if(isPaused())
+                        resume();
+                }
+
+                //PLAYER
                 stick2.addDirection((e.getKeyCode()==KeyEvent.VK_UP), (e.getKeyCode()==KeyEvent.VK_DOWN), (e.getKeyCode()==KeyEvent.VK_RIGHT), (e.getKeyCode()==KeyEvent.VK_LEFT));
                 stick1.addDirection((e.getKeyCode()==KeyEvent.VK_W), (e.getKeyCode()==KeyEvent.VK_S), (e.getKeyCode()==KeyEvent.VK_D), (e.getKeyCode()==KeyEvent.VK_A));
+
+
             }
 
         });
@@ -262,7 +288,6 @@ public class Game extends GameManager {
 
         //System.out.println(bodyPosY+", "+yPoint+", "+moveY);
         b.applyForce(new Vector2(moveX*forceX,moveY*forceY));
-
     }
 
     /** RENDER : GRAPHICS */
@@ -276,8 +301,10 @@ public class Game extends GameManager {
 
     /** MAIN */
     public static void main(String[] args) {
-        Game simulation = new Game(50);
+        Game simulation = new Game(45);
 
         simulation.run();
     }
+    
+  
 }

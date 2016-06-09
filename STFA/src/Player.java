@@ -44,7 +44,7 @@ public class Player {
     Body rightLeg;
     Body leftFoot;          //-> inflicts damage
     Body rightFoot;
-
+    LifeBarPoints lifePointBar;
 
     Color color;
 
@@ -270,6 +270,15 @@ public class Player {
         trunkRightLeg.setCollisionAllowed(false);
         world.addJoint(trunkRightLeg);
         joints.add(trunkRightLeg);
+        
+        LifeBarPoints maxLifePointBar = new LifeBarPoints(this.lifePoints, Color.WHITE);
+        maxLifePointBar.translate(stickman1x, 0);
+        world.addBody(maxLifePointBar);
+        
+        lifePointBar = new LifeBarPoints(this.lifePoints, Color.RED);
+        lifePointBar.translate(stickman1x, 0);
+        world.addBody(lifePointBar);
+        
     }
 
     /**
@@ -450,5 +459,6 @@ public class Player {
                 }
             },this.unvulnerabilityTime);
         }
+        lifePointBar.setLife(this.lifePoints);
     }
 }

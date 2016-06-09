@@ -23,12 +23,7 @@
  * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import java.awt.Canvas;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -37,9 +32,7 @@ import java.awt.event.WindowEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferStrategy;
 
-import javax.swing.JFrame;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.*;
 
 import org.dyn4j.dynamics.World;
 
@@ -60,11 +53,12 @@ public abstract class GameManager extends JFrame {
     // pixels per meter scale factor */
     protected final double scale;
     //True if the simulation is exited */
-    private boolean stopped;
+    protected boolean stopped;
     /** True if the simulation is paused */
-    private boolean paused;
+    private boolean paused = false;
     /** The time stamp for the last iteration */
     private long last;
+    private Menu menu;
 
     /**
      * Constructor.
@@ -106,6 +100,7 @@ public abstract class GameManager extends JFrame {
         this.canvas.setMaximumSize(size);
         // add the canvas to the JFrame
         this.add(this.canvas);
+
         // make the JFrame not resizable
         // (this way I dont have to worry about resize events)
         this.setResizable(false);
@@ -205,7 +200,6 @@ public abstract class GameManager extends JFrame {
 
         // render anything about the simulation (will render the World objects)
         this.render(g, elapsedTime);
-
         // update the World
         this.update(g, elapsedTime);
 
@@ -270,6 +264,7 @@ public abstract class GameManager extends JFrame {
             BodyRenderer body = (BodyRenderer) this.world.getBody(i);
             this.render(g, elapsedTime, body);
         }
+        
     }
 
     /**
@@ -312,7 +307,14 @@ public abstract class GameManager extends JFrame {
      * Pauses the simulation.
      */
     public synchronized void pause() {
-        this.paused = true;
+    	if(!paused){
+	        this.paused = true;
+
+	        this.menu= new Menu(this);
+    	}
+    }
+    public synchronized void resume() {
+        this.paused = false;
     }
 
     /**

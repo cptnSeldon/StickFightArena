@@ -24,6 +24,7 @@
  */
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Arc2D;
@@ -39,6 +40,7 @@ import org.dyn4j.geometry.Polygon;
 import org.dyn4j.geometry.Segment;
 import org.dyn4j.geometry.Shape;
 import org.dyn4j.geometry.Slice;
+import org.dyn4j.geometry.TextShape;
 import org.dyn4j.geometry.Vector2;
 
 /**
@@ -76,6 +78,8 @@ public final class Graphics2DRenderer {
             Graphics2DRenderer.render(g, (Slice)shape, scale, color);
         } else if (shape instanceof HalfEllipse) {
             Graphics2DRenderer.render(g, (HalfEllipse)shape, scale, color);
+        } else if (shape instanceof TextShape) {
+            Graphics2DRenderer.render(g, (TextShape)shape, scale, color);
         } else {
             // unknown shape
         }
@@ -114,7 +118,24 @@ public final class Graphics2DRenderer {
                 center.y * scale);
         g.draw(l);
     }
+    public static final void render(Graphics2D g, TextShape text, double scale, Color color) {
+    	double radius = text.getRadius();
+        Vector2 center = text.getCenter();
 
+        // fill the shape
+        g.setColor(color);
+        // draw the outline
+        g.setColor(getOutlineColor(color));
+        AffineTransform at = g.getTransform();
+        AffineTransform yFlip = AffineTransform.getScaleInstance(-1, -1);
+        g.setTransform(yFlip);
+        g.rotate(Math.PI);
+        Font font = new Font("Serif", Font.PLAIN, text.getTextScale());
+        g.setFont(font);
+        g.drawString(text.getText(),(int)(center.x * scale),(int)(
+                center.y * scale));
+        g.setTransform(at);
+    }
     /**
      * Renders the given {@link Polygon} to the given graphics context using the given scale and color.
      * @param g the graphics context
