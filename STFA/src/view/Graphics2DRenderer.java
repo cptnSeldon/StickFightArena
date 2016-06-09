@@ -1,4 +1,4 @@
-/*
+package view;/*
  * Copyright (c) 2010-2015 William Bittle  http://www.dyn4j.org/
  * All rights reserved.
  *
@@ -57,6 +57,7 @@ public final class Graphics2DRenderer {
      * @param scale the scale to render the shape (pixels per dyn4j unit (typically meter))
      * @param color the color
      */
+
     public static final void render(Graphics2D g, Shape shape, double scale, Color color) {
         // no-op
         if (shape == null) return;
@@ -110,14 +111,8 @@ public final class Graphics2DRenderer {
         g.setColor(getOutlineColor(color));
         g.draw(c);
 
-        // draw a line so that rotation is visible
-        Line2D.Double l = new Line2D.Double(
-                center.x * scale,
-                center.y * scale,
-                (center.x + radius) * scale,
-                center.y * scale);
-        g.draw(l);
     }
+
     public static final void render(Graphics2D g, TextShape text, double scale, Color color) {
     	double radius = text.getRadius();
         Vector2 center = text.getCenter();
@@ -130,7 +125,7 @@ public final class Graphics2DRenderer {
         AffineTransform yFlip = AffineTransform.getScaleInstance(-1, -1);
         g.setTransform(yFlip);
         g.rotate(Math.PI);
-        Font font = new Font("Serif", Font.PLAIN, text.getTextScale());
+        Font font = new Font("Arial", Font.PLAIN, text.getTextScale());
         g.setFont(font);
         g.drawString(text.getText(),(int)(center.x * scale),(int)(
                 center.y * scale));

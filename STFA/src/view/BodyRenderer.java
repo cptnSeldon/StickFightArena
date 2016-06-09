@@ -1,11 +1,12 @@
+package view;
+
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Ellipse2D;
 
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.BodyFixture;
-//import org.dyn4j.examples.Graphics2DRenderer;
+//import org.dyn4j.examples.View.Graphics2DRenderer;
 import org.dyn4j.geometry.Convex;
 
 
@@ -15,23 +16,6 @@ public class BodyRenderer extends Body {
     protected Color color;
     protected Color initColor;
 
-    private long lastTouch;
-
-    public long getLastTouch() {
-        return lastTouch;
-    }
-
-    public void setLastTouch(long lastTouch) {
-        this.lastTouch = lastTouch;
-    }
-
-    public void resetColor(){
-
-
-        if((System.currentTimeMillis()-lastTouch)>750){
-            this.setColor(initColor);
-        }
-    }
     /**
      * Default constructor.
      */
@@ -119,6 +103,4 @@ public class BodyRenderer extends Body {
         // render the fixture
         Graphics2DRenderer.render(g, convex, scale, color);
     }
-
-
 }

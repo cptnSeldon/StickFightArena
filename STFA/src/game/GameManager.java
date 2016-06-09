@@ -1,4 +1,4 @@
-/*
+package game;/*
  * Copyright (c) 2010-2015 William Bittle  http://www.dyn4j.org/
  * All rights reserved.
  *
@@ -34,7 +34,9 @@ import java.awt.image.BufferStrategy;
 
 import javax.swing.*;
 
+import view.BodyRenderer;
 import org.dyn4j.dynamics.World;
+import view.menu.GameMenu;
 
 /**
  * SIMULATION FRAME class
@@ -58,7 +60,7 @@ public abstract class GameManager extends JFrame {
     private boolean paused = false;
     /** The time stamp for the last iteration */
     private long last;
-    private Menu menu;
+    private GameMenu menu;
 
     /**
      * Constructor.
@@ -114,20 +116,29 @@ public abstract class GameManager extends JFrame {
     /**
      *  LISTENERS
      */
-    /** MOUSE : LISTENER */
+
+    /**
+     * MOUSE : LISTENER
+     * @param ml
+     */
     public void addMouseListenerToCanvas(MouseListener ml){
         this.canvas.addMouseListener(ml);
     }
 
-    /** MOUSE MOTION : LISTENER */
+    /**
+     * MOUSE MOTION : LISTENER
+     * @param mml
+     */
     public void addMouseMotionToCanvas(MouseMotionListener mml){
         this.canvas.addMouseMotionListener(mml);
     }
 
-    /** KEY : LISTENER */
+    /**
+     *  KEY : LISTENER
+     * @param kl
+     */
     public void addKeyListenerToCanvas(KeyListener kl){
         this.canvas.addKeyListener(kl);
-
     }
 
     /**
@@ -310,7 +321,7 @@ public abstract class GameManager extends JFrame {
     	if(!paused){
 	        this.paused = true;
 
-	        this.menu= new Menu(this);
+	        this.menu= new GameMenu(this);
     	}
     }
     public synchronized void resume() {

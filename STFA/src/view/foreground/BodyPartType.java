@@ -1,3 +1,5 @@
+package view.foreground;
+
 /**
  * Created by auntfox on 22.05.2016.
  */
