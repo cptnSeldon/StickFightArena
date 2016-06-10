@@ -65,7 +65,6 @@ public abstract class GameManager extends JFrame {
     /**
      * Constructor.
      * <p>
-     * By default creates a 800x600 canvas.
      * @param name the frame name
      * @param scale the pixels per meter scale factor
      */
@@ -93,7 +92,7 @@ public abstract class GameManager extends JFrame {
         });
 
         // create the size of the window
-        Dimension size = new Dimension(1280, 768);
+        Dimension size = new Dimension(800, 600);
 
         // create a canvas to paint to
         this.canvas = new Canvas();

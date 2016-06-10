@@ -69,6 +69,8 @@ public class Player extends Observable{
 
 
     float force = 300;
+    float maxSpeed = 5;
+
     Vector2 directionForce;
     Boolean directionKeys[] = {false, false, false, false};
 
@@ -108,6 +110,7 @@ public class Player extends Observable{
         this.damageOut = 5;
             //grab & throw state
         this.isDragged = false;
+
 
         joints = new ArrayList<>();
 
@@ -297,18 +300,14 @@ public class Player extends Observable{
      * @param left
      */
     public void addDirection(boolean up, boolean down, boolean right, boolean left){
-        directionKeys[0] = (up | directionKeys[0]) & !down;
-        directionKeys[1] = (down | directionKeys[1]) & !up;
-        directionKeys[2] = (right | directionKeys[2]) & !left;
-        directionKeys[3] = (left | directionKeys[3]) & !right;
-        /*
-        System.out.println("add");
-        for(int i = 0; i < 4; i++){
-            System.out.print(directionKeys[i]);
+        if(isAlive){
+            directionKeys[0] = (up | directionKeys[0]) & !down;
+            directionKeys[1] = (down | directionKeys[1]) & !up;
+            directionKeys[2] = (right | directionKeys[2]) & !left;
+            directionKeys[3] = (left | directionKeys[3]) & !right;
+            updateDirectionForce();
         }
-        System.out.println();
-        */
-        updateDirectionForce();
+
     }
 
     /**
@@ -323,13 +322,6 @@ public class Player extends Observable{
         directionKeys[1] = (!down & directionKeys[1]);
         directionKeys[2] = (!right & directionKeys[2]);
         directionKeys[3] = (!left & directionKeys[3]);
-        /*
-        System.out.println("del");
-        for(int i = 0; i < 4; i++){
-            System.out.print(directionKeys[i]);
-        }
-        System.out.println();
-        */
         updateDirectionForce();
     }
 
@@ -337,6 +329,7 @@ public class Player extends Observable{
      * UPDATE DIRECTION FORCE
      */
     private void updateDirectionForce(){
+
         float dVert = 0;
         float dHor = 0;
 
@@ -351,6 +344,7 @@ public class Player extends Observable{
         }else if(directionKeys[3]){
             dHor = -force;
         }
+
 
         this.getGravityCenter().applyForce(new Vector2(dHor, dVert));
 
