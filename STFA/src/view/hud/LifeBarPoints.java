@@ -1,12 +1,14 @@
 package view.hud;
 
 import java.awt.Color;
+import java.util.Observable;
+import java.util.Observer;
 
 import view.BodyRenderer;
 import org.dyn4j.dynamics.BodyFixture;
 import org.dyn4j.geometry.Geometry;
 
-public class LifeBarPoints extends BodyRenderer {
+public class LifeBarPoints extends BodyRenderer implements Observer {
 
 	/**
 	 * ATTRIBUTES
@@ -51,5 +53,15 @@ public class LifeBarPoints extends BodyRenderer {
 		
 		return (5/(double)maxlife)*life;
 	}
-	
+
+	/**
+	 * OBSERVER : update
+	 * @param player
+	 * @param life
+     */
+	@Override
+	public void update(Observable player, Object life) {
+
+		this.setLife((int)life);
+	}
 }

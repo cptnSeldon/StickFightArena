@@ -13,17 +13,15 @@ import view.hud.LifeBarPoints;
 
 import java.awt.Color;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
-public class Player {
+public class Player extends Observable{
 
     /**
      *  ATTRIBUTES
      */
     //STICKMAN
+     String name;
     //sizes
     double rHead = 0.35;
     double rHand = 0.2;
@@ -48,7 +46,6 @@ public class Player {
     Body rightLeg;
     Body leftFoot;          //-> inflicts damage
     Body rightFoot;
-    LifeBarPoints lifePointBar;
 
     Color color;
 
@@ -89,15 +86,19 @@ public class Player {
      * @param world
      * @param color
      */
-    public Player(double positionX, double positionY, World world, Color color) {
+    public Player(String name, double positionX, double positionY, World world, Color color) {
+
         directionForce = new Vector2(0,0);
-        this.vulnerableTimer = new Timer();
-        this.color=color;
+
+
         //BASIC SETTINGS
         //initialization
+        this.name = name;
         this.positionX = positionX;
         this.positionY = positionY;
         this.world = world;
+        this.vulnerableTimer = new Timer();
+        this.color=color;
         //collision detection
             //life points
         this.maxLifePoints = 100;
@@ -278,14 +279,14 @@ public class Player {
         trunkRightLeg.setCollisionAllowed(false);
         world.addJoint(trunkRightLeg);
         joints.add(trunkRightLeg);
+    }
 
-        LifeBarPoints maxLifePointBar = new LifeBarPoints(this.lifePoints, new Color(232, 44, 69));
-        maxLifePointBar.translate(positionX, 0);
-        world.addBody(maxLifePointBar);
+    public String getName () {
+        return this.name;
+    }
 
-        lifePointBar = new LifeBarPoints(this.lifePoints, new Color( 20,181, 33));
-        lifePointBar.translate(positionX, 0);
-        world.addBody(lifePointBar);
+    public Color getColor() {
+        return this.color;
     }
 
     /**
@@ -476,6 +477,8 @@ public class Player {
                 }
             },this.unvulnerabilityTime);
         }
-        lifePointBar.setLife(this.lifePoints);
+            //observer notification
+        this.setChanged();
+        this.notifyObservers(this.lifePoints);
     }
 }

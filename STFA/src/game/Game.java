@@ -20,6 +20,7 @@ import org.dyn4j.geometry.TextShape;
 import org.dyn4j.geometry.Vector2;
 import view.foreground.BodyPartType;
 import view.foreground.Player;
+import view.hud.HUD;
 
 import java.lang.System;
 
@@ -91,21 +92,22 @@ public class Game extends GameManager {
         world.addBody(floorright);
 
         //PLAYER : 1
-        stick1 = new Player(-5, 0, world, new Color(44, 100, 232));
+        stick1 = new Player("Player 1", -5, 0, world, new Color(44, 100, 232));
         Body control = stick1.getGravityCenter();
 
         //PLAYER : 2
-        stick2 = new Player(5,0, world, new Color(44, 232, 82));
+        stick2 = new Player("Player 2", 5,0, world, new Color(44, 232, 82));
         Body control2 = stick2.getGravityCenter();
 
-        //TEXT
-        BodyRenderer br = new BodyRenderer(new Color(44, 100, 232));
-		br.addFixture(new TextShape(6.75,1.5,30,"Player 1"));
-        world.addBody(br);
-        
-        BodyRenderer br2 = new BodyRenderer(new Color(44, 232, 82));
-		br2.addFixture(new TextShape(16.75,1.5,30,"Player 2"));
-        world.addBody(br2);
+        //HUD
+        HUD hud = new HUD(world);
+
+        hud.addLifePointBar(stick1.getMaxLifePoints(), -5, stick1);
+        hud.addLifePointBar(stick2.getMaxLifePoints(),  5, stick2);
+
+        hud.addPlayerName(stick1.getName(),  6.75, stick1.getColor());
+        hud.addPlayerName(stick2.getName(), 16.75, stick2.getColor());
+
         /** LISTENERS */
         //MOUSE LISTENER
         this.addMouseListenerToCanvas(new MouseListener() {
