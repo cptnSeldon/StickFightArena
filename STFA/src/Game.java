@@ -14,6 +14,7 @@ import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.BodyFixture;
 import org.dyn4j.dynamics.CollisionListener;
 import org.dyn4j.dynamics.contact.ContactConstraint;
+import org.dyn4j.dynamics.joint.FrictionJoint;
 import org.dyn4j.geometry.Convex;
 import org.dyn4j.geometry.Geometry;
 import org.dyn4j.geometry.MassType;
@@ -40,6 +41,22 @@ public class Game extends GameManager {
      */
     protected void initializeWorld() {
 
+
+        //BOTTOM
+        /*
+        Body test = new BodyRenderer(Color.GREEN);{
+
+            Convex c = Geometry.createRectangle(0.5, 0.5);
+            BodyFixture bf = new BodyFixture(c);
+            test.addFixture(bf);
+        }
+        System.out.println(this.getHeight());
+        System.out.println(this.getWidth());
+        test.translate(new Vector2(0, -this.getHeight()/57));
+        test.setMass(MassType.INFINITE);
+        world.addBody(test);*/
+
+
         /** FLOORS */
         //BOTTOM
         Body floorbot = new BodyRenderer();{
@@ -48,7 +65,7 @@ public class Game extends GameManager {
             BodyFixture bf = new BodyFixture(c);
             floorbot.addFixture(bf);
         }
-        floorbot.translate(new Vector2(0, -14.0));
+        floorbot.translate(new Vector2(0, -this.getHeight()/60));
         floorbot.setMass(MassType.INFINITE);
         world.addBody(floorbot);
 
@@ -70,7 +87,7 @@ public class Game extends GameManager {
             BodyFixture bf = new BodyFixture(c);
             floorleft.addFixture(bf);
         }
-        floorleft.translate(new Vector2(-12.75, -8.75));
+        floorleft.translate(new Vector2(-getWidth()/100.8, -8.75));
         floorleft.setMass(MassType.INFINITE);
         world.addBody(floorleft);
 
@@ -81,7 +98,7 @@ public class Game extends GameManager {
             BodyFixture bf = new BodyFixture(c);
             floorright.addFixture(bf);
         }
-        floorright.translate(new Vector2(12.75, -8.75));
+        floorright.translate(new Vector2(getWidth()/100.8, -8.75));
         floorright.setMass(MassType.INFINITE);
         world.addBody(floorright);
 
@@ -91,47 +108,9 @@ public class Game extends GameManager {
 
         //PLAYER : 1
         stick1 = new Player(stickman1x, stickman1y, world, new Color(0, 122, 60));
-        Body control = stick1.getGravityCenter();
 
         //PLAYER : 2
         stick2 = new Player(5,0.5, world, new Color(60, 30, 120));
-        Body control2 = stick2.getGravityCenter();
-
-        /** LISTENERS */
-        //MOUSE LISTENER
-        this.addMouseListenerToCanvas(new MouseListener() {
-
-            //RELEASED
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                // TODO Auto-generated method stub
-            }
-
-            //PRESSED -> USED
-            @Override
-            public void mousePressed(MouseEvent e) {
-                moveBodyToPointer(control,e.getPoint(), 50, 100);
-            }
-
-            //EXITED
-            @Override
-            public void mouseExited(MouseEvent e) {
-                // TODO Auto-generated method stub
-            }
-
-            //ENTERED
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                // TODO Auto-generated method stub
-
-            }
-
-            //CLICKED
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                // TODO Auto-generated method stub
-            }
-        });
 
         //KEY LISTENER
         this.addKeyListenerToCanvas(new KeyListener() {
@@ -246,24 +225,6 @@ public class Game extends GameManager {
         }
     }
 
-
-
-    /**
-     *  MOVE BODY TO POINTER
-     */
-    private void moveBodyToPointer(Body b, Point p, double forceX, double forceY) {
-
-        double bodyPosX = b.getTransform().getTranslationX()+11;
-        double bodyPosY = b.getTransform().getTranslationY()+11;
-        double xPoint = p.x/this.scale;
-        double yPoint = 11-p.y/this.scale;
-        double moveX = -(bodyPosX-xPoint);
-        double moveY = -(bodyPosY-yPoint);
-
-        //System.out.println(bodyPosY+", "+yPoint+", "+moveY);
-        b.applyForce(new Vector2(moveX*forceX,moveY*forceY));
-
-    }
 
     /** RENDER : GRAPHICS */
     @Override
