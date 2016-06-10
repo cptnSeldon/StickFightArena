@@ -1,6 +1,4 @@
-/**
- * Created by nolvulon on 25.04.2016.
- */
+package game;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -8,6 +6,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import view.BodyRenderer;
 import org.dyn4j.collision.manifold.Manifold;
 import org.dyn4j.collision.narrowphase.Penetration;
 import org.dyn4j.dynamics.Body;
@@ -18,8 +17,13 @@ import org.dyn4j.dynamics.joint.FrictionJoint;
 import org.dyn4j.geometry.Convex;
 import org.dyn4j.geometry.Geometry;
 import org.dyn4j.geometry.MassType;
+import org.dyn4j.geometry.TextShape;
 import org.dyn4j.geometry.Vector2;
+import view.foreground.BodyPartType;
+import view.foreground.Player;
+
 import java.lang.System;
+
 
 public class Game extends GameManager {
 
@@ -30,10 +34,11 @@ public class Game extends GameManager {
     public Player stick2;
 
     /**
-     *  CONSTRUCTOR
+     * GAME : CONSTRUCTOR
+     * @param scale
      */
     Game(double scale){
-        super("Game" , scale);
+        super("game", scale);
     }
 
     /**
@@ -101,16 +106,24 @@ public class Game extends GameManager {
         floorright.translate(new Vector2(getWidth()/100.8, -8.75));
         floorright.setMass(MassType.INFINITE);
         world.addBody(floorright);
-
-        //STICKMAN : SETTINGS
-        double stickman1x = -5;
-        double stickman1y = 0;
-
-        //PLAYER : 1
-        stick1 = new Player(stickman1x, stickman1y, world, new Color(0, 122, 60));
+        
+        stick1 = new Player(-5, 0, world, new Color(44, 100, 232));
+        Body control = stick1.getGravityCenter();
 
         //PLAYER : 2
-        stick2 = new Player(5,0.5, world, new Color(60, 30, 120));
+        stick2 = new Player(5,0, world, new Color(44, 232, 82));
+        Body control2 = stick2.getGravityCenter();
+
+        //TEXT
+        BodyRenderer br = new BodyRenderer(new Color(44, 100, 232));
+		br.addFixture(new TextShape(6.75,1.5,30,"Player 1"));
+        world.addBody(br);
+        
+        BodyRenderer br2 = new BodyRenderer(new Color(44, 232, 82));
+		br2.addFixture(new TextShape(16.75,1.5,30,"Player 2"));
+        world.addBody(br2);
+        /** LISTENERS */
+
 
         //KEY LISTENER
         this.addKeyListenerToCanvas(new KeyListener() {
@@ -124,7 +137,9 @@ public class Game extends GameManager {
             //RELEASED -> USED
             @Override
             public void keyReleased(KeyEvent e) {
-                // TODO Auto-generated method stub
+                //IN GAME
+
+                //PLAYER
                 stick2.delDirection((e.getKeyCode()==KeyEvent.VK_UP), (e.getKeyCode()==KeyEvent.VK_DOWN), (e.getKeyCode()==KeyEvent.VK_RIGHT), (e.getKeyCode()==KeyEvent.VK_LEFT));
                 stick1.delDirection((e.getKeyCode()==KeyEvent.VK_W), (e.getKeyCode()==KeyEvent.VK_S), (e.getKeyCode()==KeyEvent.VK_D), (e.getKeyCode()==KeyEvent.VK_A));
             }
@@ -132,6 +147,19 @@ public class Game extends GameManager {
             //KEY PRESSED -> USED
             @Override
             public void keyPressed(KeyEvent e) {
+                //IN GAME
+                //paused game
+                if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
+
+                    if(!isPaused()){
+                        pause();
+                     }
+
+                    if(isPaused())
+                        resume();
+                }
+
+                //PLAYER
                 stick2.addDirection((e.getKeyCode()==KeyEvent.VK_UP), (e.getKeyCode()==KeyEvent.VK_DOWN), (e.getKeyCode()==KeyEvent.VK_RIGHT), (e.getKeyCode()==KeyEvent.VK_LEFT));
                 stick1.addDirection((e.getKeyCode()==KeyEvent.VK_W), (e.getKeyCode()==KeyEvent.VK_S), (e.getKeyCode()==KeyEvent.VK_D), (e.getKeyCode()==KeyEvent.VK_A));
             }
@@ -145,7 +173,7 @@ public class Game extends GameManager {
             @Override
             public boolean collision(Body body, BodyFixture bodyFixture, Body body1, BodyFixture bodyFixture1) {
 
-                if(stick1.IsAlive() && stick2.IsAlive()) {
+                if(stick1.isAlive() && stick2.isAlive()) {
                     collisionManagement(body, body1);
                 }
                 return true;
@@ -186,10 +214,10 @@ public class Game extends GameManager {
             BodyRenderer sBody0 = (BodyRenderer)body0;
             BodyRenderer sBody1 = (BodyRenderer)body1;
 
-            //System.out.println("Game 1 touched with " + bpt0 + " Game 2 at " + bpt1);
+            //System.out.println("Game 1 touched with " + bpt0 + " Game.Game 2 at " + bpt1);
 
             //head - hand - foot vs other parts
-            if(stick1.IsVulnerable() && ((bpt0 == BodyPartType.HEAD ||
+            if(stick1.isVulnerable() && ((bpt0 == BodyPartType.HEAD ||
                     bpt0 == BodyPartType.LEFTHAND || bpt0 == BodyPartType.RIGHTHAND ||
                     bpt0 == BodyPartType.LEFTFOOT || bpt0 == BodyPartType.RIGHTFOOT) &&
                    !(bpt1 == BodyPartType.HEAD ||
@@ -200,12 +228,12 @@ public class Game extends GameManager {
                 stick1.applyDamage(stick2.getDamageOut(), sBody1);
                 System.out.println("Game 1 Life : " + stick1.getLifePoints());
 
-                //System.out.println("Game 1 inflicts damages to Game 2");
+                //System.out.println("Game 1 inflicts damages to Game.Game 2");
             }
 
             //STICKMAN 2
             //head - hand - foot vs other parts
-            if(stick2.IsVulnerable()&& ((bpt1 == BodyPartType.HEAD ||
+            if(stick2.isVulnerable()&& ((bpt1 == BodyPartType.HEAD ||
                     bpt1 == BodyPartType.LEFTHAND || bpt1 == BodyPartType.RIGHTHAND ||
                     bpt1 == BodyPartType.LEFTFOOT || bpt1 == BodyPartType.RIGHTFOOT) &&
                    !(bpt0 == BodyPartType.HEAD ||
@@ -214,7 +242,7 @@ public class Game extends GameManager {
 
 
                 stick2.applyDamage(stick1.getDamageOut(),sBody0);
-                System.out.println("Game 2 Life : " + stick2.getLifePoints());
+                System.out.println("Game.Game 2 Life : " + stick2.getLifePoints());
             }
 
             //TODO : new method allowing impulse customization
@@ -237,8 +265,10 @@ public class Game extends GameManager {
 
     /** MAIN */
     public static void main(String[] args) {
-        Game simulation = new Game(50);
+        Game simulation = new Game(45);
 
         simulation.run();
     }
+    
+  
 }

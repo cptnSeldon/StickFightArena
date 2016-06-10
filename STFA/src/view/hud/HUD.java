@@ -1,6 +1,7 @@
+package view.hud;
 
 /**
- *  HUD : Head Up Display
+ *  view.hud.HUD : Head Up Display
  */
 public class HUD {
 
