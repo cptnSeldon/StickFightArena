@@ -17,11 +17,12 @@ import org.dyn4j.dynamics.joint.FrictionJoint;
 import org.dyn4j.geometry.Convex;
 import org.dyn4j.geometry.Geometry;
 import org.dyn4j.geometry.MassType;
-import org.dyn4j.geometry.TextShape;
 import org.dyn4j.geometry.Vector2;
 import view.foreground.BodyPartType;
 import view.foreground.Player;
 import view.hud.HUD;
+import view.menu.GameMenu;
+import view.menu.IAction;
 
 import java.lang.System;
 
@@ -107,26 +108,73 @@ public class Game extends GameManager {
         floorright.translate(new Vector2(getWidth()/100.8, -8.75));
         floorright.setMass(MassType.INFINITE);
         world.addBody(floorright);
-		
-        //PLAYER : 1
-        stick1 = new Player("Player 1", -5, 0, world, new Color(44, 100, 232));
-        Body control = stick1.getGravityCenter();
 
-        //PLAYER : 2
-        stick2 = new Player("Player 2", 5,0, world, new Color(44, 232, 82));
-        Body control2 = stick2.getGravityCenter();
+        //GAME MENU
+        menu = new GameMenu(world);
 
-        //HUD
-        HUD hud = new HUD(world);
+        menu.setStartAction(new IAction() {
+            @Override
+            public void execute() {
+                startGame();
+            }
+        });
 
-        hud.addLifePointBar(stick1.getMaxLifePoints(), -5, stick1);
-        hud.addLifePointBar(stick2.getMaxLifePoints(),  5, stick2);
+            //pause
+        menu.setContinueAction(new IAction() {
 
-        hud.addPlayerName(stick1.getName(),  6.75, stick1.getColor());
-        hud.addPlayerName(stick2.getName(), 16.75, stick2.getColor());
+            @Override
+            public void execute() {
+                resume();
+            }
+        });
+        menu.setQuitAction(new IAction() {
+
+            @Override
+            public void execute() {
+                System.exit(0);
+            }
+        });
+
+
+        //start
+        menu.showStartMenu();
 
         /** LISTENERS */
+        //MOUSE LISTENER
+         this.addMouseListenerToCanvas(new MouseListener() {
 
+                         //RELEASED
+                         @Override
+                 public void mouseReleased(MouseEvent e) {
+                         // TODO Auto-generated method stub
+                             }
+
+                         //PRESSED -> USED
+                         @Override
+                 public void mousePressed(MouseEvent e) {
+                         //moveBodyToPointer(control2,e.getPoint(), 50, 100);
+                             menu.clickOnMenu(e.getX(), e.getY());
+                     }
+
+                         //EXITED
+                         @Override
+                 public void mouseExited(MouseEvent e) {
+                         // TODO Auto-generated method stub
+                             }
+
+                         //ENTERED
+                         @Override
+                 public void mouseEntered(MouseEvent e) {
+                         // TODO Auto-generated method stub
+
+                                     }
+
+                         //CLICKED
+                         @Override
+                 public void mouseClicked(MouseEvent e) {
+                         // TODO Auto-generated method stub
+                             }
+             });
 
         //KEY LISTENER
         this.addKeyListenerToCanvas(new KeyListener() {
@@ -143,6 +191,8 @@ public class Game extends GameManager {
                 //IN GAME
 
                 //PLAYER
+                if(stick1 == null || stick2 == null)
+                    return;
                 stick2.delDirection((e.getKeyCode()==KeyEvent.VK_UP), (e.getKeyCode()==KeyEvent.VK_DOWN), (e.getKeyCode()==KeyEvent.VK_RIGHT), (e.getKeyCode()==KeyEvent.VK_LEFT));
                 stick1.delDirection((e.getKeyCode()==KeyEvent.VK_W), (e.getKeyCode()==KeyEvent.VK_S), (e.getKeyCode()==KeyEvent.VK_D), (e.getKeyCode()==KeyEvent.VK_A));
             }
@@ -156,10 +206,12 @@ public class Game extends GameManager {
 
                     if(!isPaused()){
                         pause();
-                     }
+                        System.out.println("is paused");
 
-                    if(isPaused())
+                     } else {
                         resume();
+                        System.out.println("is resumed");
+                    }
                 }
 
                 //PLAYER
@@ -176,7 +228,7 @@ public class Game extends GameManager {
             @Override
             public boolean collision(Body body, BodyFixture bodyFixture, Body body1, BodyFixture bodyFixture1) {
 
-                if(stick1.isAlive() && stick2.isAlive()) {
+                if( stick1 != null && stick1.isAlive() && stick2 != null && stick2.isAlive()) {
                     collisionManagement(body, body1);
                 }
                 return true;
@@ -199,6 +251,41 @@ public class Game extends GameManager {
             }
         });
 
+    }
+
+    public void startGame () {
+        menu.clear();
+        //PLAYER : 1
+        stick1 = new Player("Player 1", -5, 0, world, new Color(44, 100, 232));
+        Body control = stick1.getGravityCenter();
+
+        //PLAYER : 2
+        stick2 = new Player("Player 2", 5,0, world, new Color(44, 232, 82));
+        Body control2 = stick2.getGravityCenter();
+
+        //HUD
+        HUD hud = new HUD(world);
+
+        hud.addLifePointBar(stick1.getMaxLifePoints(), -5, stick1);
+        hud.addLifePointBar(stick2.getMaxLifePoints(),  5, stick2);
+
+        hud.addPlayerName(stick1.getName(),  6.75, stick1.getColor());
+        hud.addPlayerName(stick2.getName(), 16.75, stick2.getColor());
+    }
+
+    /**
+     *  MOVE BODY TO POINTER
+     */
+    private void moveBodyToPointer(Body b, Point p, double forceX, double forceY) {
+
+        double bodyPosX = b.getTransform().getTranslationX()+11;
+        double bodyPosY = b.getTransform().getTranslationY()+11;
+        double xPoint = p.x/this.scale;
+        double yPoint = 11-p.y/this.scale;
+        double moveX = -(bodyPosX-xPoint);
+        double moveY = -(bodyPosY-yPoint);
+        System.out.println(bodyPosY+", "+yPoint+", "+moveY);
+        b.applyForce(new Vector2(moveX*forceX,moveY*forceY));
     }
 
     /**

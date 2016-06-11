@@ -1,4 +1,5 @@
-package game;/*
+package game;
+/*
  * Copyright (c) 2010-2015 William Bittle  http://www.dyn4j.org/
  * All rights reserved.
  *
@@ -60,7 +61,9 @@ public abstract class GameManager extends JFrame {
     private boolean paused = false;
     /** The time stamp for the last iteration */
     private long last;
-    private GameMenu menu;
+
+    //MENU
+    protected GameMenu menu;
 
     /**
      * Constructor.
@@ -165,9 +168,7 @@ public abstract class GameManager extends JFrame {
                 // perform an infinite loop stopped
                 // render as fast as possible
                 while (!isStopped()) {
-                    if (!paused) {
-                        gameLoop();
-                    }
+                    gameLoop();
                     // you could add a Thread.yield(); or
                     // Thread.sleep(long) here to give the
                     // CPU some breathing room
@@ -211,7 +212,8 @@ public abstract class GameManager extends JFrame {
         // render anything about the simulation (will render the World objects)
         this.render(g, elapsedTime);
         // update the World
-        this.update(g, elapsedTime);
+        if(!paused)
+            this.update(g, elapsedTime);
 
         // dispose of the graphics object
         g.dispose();
@@ -319,12 +321,13 @@ public abstract class GameManager extends JFrame {
     public synchronized void pause() {
     	if(!paused){
 	        this.paused = true;
-
-	        this.menu= new GameMenu(this);
+            this.menu.showPause();
     	}
     }
     public synchronized void resume() {
+
         this.paused = false;
+        this.menu.clear();
     }
 
     /**

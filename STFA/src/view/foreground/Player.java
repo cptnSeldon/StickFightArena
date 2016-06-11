@@ -111,7 +111,6 @@ public class Player extends Observable{
             //grab & throw state
         this.isDragged = false;
 
-
         joints = new ArrayList<>();
 
         /** BODY ELEMENTS */
@@ -282,6 +281,9 @@ public class Player extends Observable{
         trunkRightLeg.setCollisionAllowed(false);
         world.addJoint(trunkRightLeg);
         joints.add(trunkRightLeg);
+
+        //GRAVITY CENTER
+        
     }
 
     public String getName () {
