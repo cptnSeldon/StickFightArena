@@ -34,6 +34,9 @@ public class Player extends Observable{
     double positionY = 0;
 
     //COLLISION MANAGEMENT
+
+    List<Body> bodyParts;
+
     Body head;              //-> inflicts damage
     Body trunk;             //-> receives damage
     //upper body
@@ -91,7 +94,7 @@ public class Player extends Observable{
     public Player(String name, double positionX, double positionY, World world, Color color) {
 
         directionForce = new Vector2(0,0);
-
+        bodyParts = new ArrayList<>();
 
         //BASIC SETTINGS
         //initialization
@@ -122,6 +125,8 @@ public class Player extends Observable{
         head.setMass(MassType.NORMAL);
         head.translate(positionX+0, positionY+hTrunk/2+rHead);
         world.addBody(head);
+            //add body part to list -> removal
+        bodyParts.add(head);
 
         //TRUNK
         trunk = new BodyRenderer(color);
@@ -131,6 +136,8 @@ public class Player extends Observable{
         trunk.setMass(MassType.NORMAL);
         trunk.translate(positionX, positionY);
         world.addBody(trunk);
+            //add body part to list -> removal
+        bodyParts.add(trunk);
 
         //ARM : left
         leftArm = new BodyRenderer(color);
@@ -140,6 +147,8 @@ public class Player extends Observable{
         leftArm.setMass(MassType.NORMAL);
         leftArm.translate(new Vector2(positionX-wTrunk/2-wMember/2, positionY+hTrunk/2*0.75));
         world.addBody(leftArm);
+            //add body part to list -> removal
+        bodyParts.add(leftArm);
 
         //ARM : right
         rightArm = new BodyRenderer(color);
@@ -149,6 +158,8 @@ public class Player extends Observable{
         rightArm.setMass(MassType.NORMAL);
         rightArm.translate(new Vector2(positionX+wTrunk/2+wMember/2, positionY+hTrunk/2*0.75));
         world.addBody(rightArm);
+            //add body part to list -> removal
+        bodyParts.add(rightArm);
 
         //HAND : left
         leftHand = new BodyRenderer(color);
@@ -158,6 +169,8 @@ public class Player extends Observable{
         leftHand.setMass(MassType.NORMAL);
         leftHand.translate(new Vector2(positionX-wTrunk/2-wMember, positionY+hTrunk/2*0.75));
         world.addBody(leftHand);
+            //add body part to list -> removal
+        bodyParts.add(leftHand);
 
         RevoluteJoint leftHandLeftArm = new RevoluteJoint(leftArm, leftHand, new Vector2(positionX-wTrunk/2-wMember, positionY+hTrunk/2*0.75));
         world.addJoint(leftHandLeftArm);
@@ -171,6 +184,8 @@ public class Player extends Observable{
         rightHand.setMass(MassType.NORMAL);
         rightHand.translate(new Vector2(positionX+wTrunk/2+wMember, positionY+hTrunk/2*0.75));
         world.addBody(rightHand);
+            //add body part to list -> removal
+        bodyParts.add(rightHand);
 
         RevoluteJoint rightArmRightHand = new RevoluteJoint(rightArm, rightHand, new Vector2(positionX+wTrunk/2+wMember, positionY+hTrunk/2*0.75));
         world.addJoint(rightArmRightHand);
@@ -184,6 +199,8 @@ public class Player extends Observable{
         leftLeg.setMass(MassType.NORMAL);
         leftLeg.translate(new Vector2(positionX-wTrunk/2-wMember/2, positionY-hTrunk/2));
         world.addBody(leftLeg);
+            //add body part to list -> removal
+        bodyParts.add(leftLeg);
 
         //LEG : right
         rightLeg = new BodyRenderer(color);
@@ -193,6 +210,8 @@ public class Player extends Observable{
         rightLeg.setMass(MassType.NORMAL);
         rightLeg.translate(new Vector2(positionX+wTrunk/2+wMember/2, positionY-hTrunk/2));
         world.addBody(rightLeg);
+            //add body part to list -> removal
+        bodyParts.add(rightLeg);
 
         //FOOT : left
         leftFoot = new BodyRenderer(color);
@@ -202,6 +221,8 @@ public class Player extends Observable{
         leftFoot.setMass(MassType.NORMAL);
         leftFoot.translate(new Vector2(positionX-wTrunk/2-wMember, positionY-hTrunk/2));
         world.addBody(leftFoot);
+            //add body part to list -> removal
+        bodyParts.add(leftFoot);
 
         RevoluteJoint leftFootLeftLeg = new RevoluteJoint(leftLeg, leftFoot, new Vector2(positionX-wTrunk/2-wMember, positionY-hTrunk/2));
         world.addJoint(leftFootLeftLeg);
@@ -215,13 +236,14 @@ public class Player extends Observable{
         rightFoot.setMass(MassType.NORMAL);
         rightFoot.translate(new Vector2(positionX+wTrunk/2+wMember, positionY-hTrunk/2));
         world.addBody(rightFoot);
+            //add body part to list -> removal
+        bodyParts.add(rightFoot);
 
         RevoluteJoint rightFootRightLeg = new RevoluteJoint(rightLeg, rightFoot, new Vector2(positionX+wTrunk/2+wMember, positionY-hTrunk/2));
         world.addJoint(rightFootRightLeg);
         joints.add(rightFootRightLeg);
 
         /** JOINTS */
-
         //TRUNK - HEAD
         RevoluteJoint trunkHead = new RevoluteJoint(trunk, head, new Vector2(positionX+0,positionY+hTrunk/2));
         trunkHead.setLimitEnabled(true);
@@ -282,8 +304,6 @@ public class Player extends Observable{
         world.addJoint(trunkRightLeg);
         joints.add(trunkRightLeg);
 
-        //GRAVITY CENTER
-        
     }
 
     public String getName () {
@@ -438,6 +458,13 @@ public class Player extends Observable{
     public void demembrate(){
         for(RevoluteJoint joint : joints){
             world.removeJoint(joint);
+        }
+    }
+
+    public void removePlayer() {
+
+        for(Body bodyPart : bodyParts){
+            world.removeBody(bodyPart);
         }
     }
 

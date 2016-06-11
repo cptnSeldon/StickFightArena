@@ -134,7 +134,18 @@ public class Game extends GameManager {
                 System.exit(0);
             }
         });
+        menu.setBackToStartMenuAction(new IAction() {
+            @Override
+            public void execute() {
 
+                if(stick1 != null)
+                    stick1.removePlayer();
+                if(stick2 != null)
+                    stick2.removePlayer();
+
+                menu.showStartMenu();
+            }
+        });
 
         //start
         menu.showStartMenu();
@@ -334,6 +345,10 @@ public class Game extends GameManager {
                 stick2.applyDamage(stick1.getDamageOut(),sBody0);
                 System.out.println("Game.Game 2 Life : " + stick2.getLifePoints());
             }
+
+                //end menu
+            if(stick1 != null && !stick1.isAlive() || stick2 != null && !stick2.isAlive())
+                menu.showEndMenu();
 
             //TODO : new method allowing impulse customization
             body0.applyImpulse(0.75);

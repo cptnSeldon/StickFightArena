@@ -20,7 +20,7 @@ public class GameMenuButton {
         this.text = new BodyRenderer(new Color(0,0,0));
         this.background = new BodyRenderer(new Color(255,255,255));
 
-        this.text.addFixture(new BodyFixture(new TextShape(x,y,70, text)));
+        this.text.addFixture(new BodyFixture(new TextShape(x,y,50, text)));
         this.background.addFixture(new BodyFixture(Geometry.createRectangle(8,1.5)));
         this.background.translate(0,-y+2.30);
     }

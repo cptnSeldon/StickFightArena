@@ -23,12 +23,23 @@ public class GameMenu {
 	private IAction continueAction;
 		//quit
 	private IAction quitAction;
+		//back to start Menu
+	private IAction backToStartMenuAction;
+	//concurrency
+	private Object lockMenuButtons;
+	//messages
+	private Color messageColor;
+	private int messageSize;
 
 	public GameMenu(World world) {
 
+		this.lockMenuButtons = new Object();
 		this.menuObjects = new ArrayList<>();
 		this.menuButtons = new ArrayList<>();
 		this.world = world;
+		//
+		this.messageColor = Color.red;
+		this.messageSize = 90;
 	}
 
 	private void addObjectToGame(BodyRenderer br) {
@@ -40,7 +51,9 @@ public class GameMenu {
 
 	private void addGameMenuButtonToGame(GameMenuButton gmb, IAction action) {
 
-		menuButtons.add(gmb);
+		synchronized (lockMenuButtons){
+			menuButtons.add(gmb);
+		}
 		gmb.setAction(action);
 
 		for(BodyRenderer br : gmb.getBodies()){
@@ -50,11 +63,13 @@ public class GameMenu {
 
 	//MAIN MENU
 	public void showStartMenu () {
+		this.clear();
+
 		BodyRenderer background = new BodyRenderer(new Color(0,0,0,95));
-		BodyRenderer messageStart = new BodyRenderer(new Color(255,0,0));
+		BodyRenderer messageStart = new BodyRenderer(this.messageColor);
 
 		background.addFixture(new BodyFixture(Geometry.createRectangle(100,40)));
-		messageStart.addFixture(new BodyFixture(new TextShape(11,7,90,"START")));
+		messageStart.addFixture(new BodyFixture(new TextShape(11,7,this.messageSize,"START")));
 
 		addObjectToGame(background);
 		addObjectToGame(messageStart);
@@ -68,12 +83,13 @@ public class GameMenu {
 
 	//PAUSE MENU
 	public void showPause() {
+		this.clear();
 
 		BodyRenderer background = new BodyRenderer(new Color(0,0,0,95));
-		BodyRenderer messagePause = new BodyRenderer(new Color(255,0,0));
+		BodyRenderer messagePause = new BodyRenderer(this.messageColor);
 
 		background.addFixture(new BodyFixture(Geometry.createRectangle(100,40)));
-		messagePause.addFixture(new BodyFixture(new TextShape(11,7,90,"PAUSE")));
+		messagePause.addFixture(new BodyFixture(new TextShape(11,7,this.messageSize,"PAUSE")));
 
 		addObjectToGame(background);
 		addObjectToGame(messagePause);
@@ -85,13 +101,36 @@ public class GameMenu {
 		addGameMenuButtonToGame(quitGame, quitAction);
 	}
 
+	//END MENU
+	public void showEndMenu () {
+
+		this.clear();
+		BodyRenderer background = new BodyRenderer(new Color(0,0,0,95));
+		BodyRenderer messageEnd = new BodyRenderer(this.messageColor);
+
+		background.addFixture(new BodyFixture(Geometry.createRectangle(100,40)));
+		messageEnd.addFixture(new BodyFixture(new TextShape(11,7,this.messageSize,"GAME OVER")));
+
+		addObjectToGame(background);
+		addObjectToGame(messageEnd);
+		//buttons
+		GameMenuButton backToStartMenu = new GameMenuButton("Back to Start", 11, 9);
+		GameMenuButton quitGame = new GameMenuButton("Quit", 11, 11);
+
+		addGameMenuButtonToGame(backToStartMenu, backToStartMenuAction);
+		addGameMenuButtonToGame(quitGame, quitAction);
+
+	}
+
 	public void clickOnMenu(double x, double y) {
 
-		for(GameMenuButton gmb : menuButtons){
+		synchronized (lockMenuButtons){
 
-			if(gmb.isTouched(x,y)){
-				System.out.println(gmb + " is clicked");
-				gmb.execute();
+			for(GameMenuButton gmb : menuButtons){
+				if(gmb.isTouched(x,y)){
+					System.out.println(gmb + " is clicked");
+					gmb.execute();
+				}
 			}
 		}
 	}
@@ -102,12 +141,16 @@ public class GameMenu {
 
 	public void setQuitAction (IAction action) { this.quitAction = action; }
 
+	public void setBackToStartMenuAction (IAction action) { this.backToStartMenuAction = action; }
+
 	public void clear() {
 
 		for (BodyRenderer br : menuObjects) {
 			world.removeBody(br);
 		}
 
-		menuButtons.clear();
+		synchronized (lockMenuButtons){
+			menuButtons.clear();
+		}
 	}
 }
