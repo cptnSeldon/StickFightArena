@@ -17,6 +17,9 @@ public class Background {
 
     /** ATTRIBUTES */
     private World world;
+
+
+
     BodyRenderer background;
     List<BodyRenderer> shapes;
 
@@ -26,6 +29,8 @@ public class Background {
         shapes = new ArrayList<>();
         background = new BodyRenderer(new Color(0,0,0,95));
         background.addFixture(new BodyFixture(Geometry.createRectangle(100,40)));
+        addShapesToBG(background);
+
     }
 
     public void createShapes (Body shape, Color color) {
@@ -40,5 +45,9 @@ public class Background {
         br.setActive(false);
         shapes.add(br);
         world.addBody(br);
+    }
+
+    public BodyRenderer getBackground() {
+        return background;
     }
 }

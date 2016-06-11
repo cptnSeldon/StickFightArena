@@ -42,10 +42,12 @@ public class HUD {
         //behind
         LifeBarPoints maxLifePointBar = new LifeBarPoints(maxLifePoints, new Color(232, 44, 69));
         maxLifePointBar.translate(posX, 0);
+        maxLifePointBar.setActive(false);
         this.world.addBody(maxLifePointBar);
         //front
         LifeBarPoints lifePointBar = new LifeBarPoints(maxLifePoints, new Color( 20,181, 33));
         lifePointBar.translate(posX, 0);
+        lifePointBar.setActive(false);
         this.world.addBody(lifePointBar);
             //observer
         player.addObserver(lifePointBar);
@@ -56,6 +58,7 @@ public class HUD {
         //TEXT
         BodyRenderer br = new BodyRenderer(color);
         br.addFixture(new TextShape(posX,1.5,30,name));
+        br.setActive(false);
         world.addBody(br);
     }
 }

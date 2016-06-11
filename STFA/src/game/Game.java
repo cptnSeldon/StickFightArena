@@ -18,6 +18,7 @@ import org.dyn4j.geometry.Convex;
 import org.dyn4j.geometry.Geometry;
 import org.dyn4j.geometry.MassType;
 import org.dyn4j.geometry.Vector2;
+import view.background.Background;
 import view.foreground.BodyPartType;
 import view.foreground.Player;
 import view.hud.HUD;
@@ -35,6 +36,8 @@ public class Game extends GameManager {
     public Player stick1;
     public Player stick2;
 
+    Background background;
+
     /**
      * GAME : CONSTRUCTOR
      * @param scale
@@ -48,22 +51,7 @@ public class Game extends GameManager {
      */
     protected void initializeWorld() {
 
-
-        //BOTTOM
-        /*
-        Body test = new BodyRenderer(Color.GREEN);{
-
-            Convex c = Geometry.createRectangle(0.5, 0.5);
-            BodyFixture bf = new BodyFixture(c);
-            test.addFixture(bf);
-        }
-        System.out.println(this.getHeight());
-        System.out.println(this.getWidth());
-        test.translate(new Vector2(0, -this.getHeight()/57));
-        test.setMass(MassType.INFINITE);
-        world.addBody(test);*/
-
-
+        background = new Background(world);
         /** FLOORS */
         //BOTTOM
         Body floorbot = new BodyRenderer();{
@@ -72,7 +60,7 @@ public class Game extends GameManager {
             BodyFixture bf = new BodyFixture(c);
             floorbot.addFixture(bf);
         }
-        floorbot.translate(new Vector2(0, -this.getHeight()/60));
+        floorbot.translate(new Vector2(0, -15.4));
         floorbot.setMass(MassType.INFINITE);
         world.addBody(floorbot);
 
@@ -94,7 +82,7 @@ public class Game extends GameManager {
             BodyFixture bf = new BodyFixture(c);
             floorleft.addFixture(bf);
         }
-        floorleft.translate(new Vector2(-getWidth()/100.8, -8.75));
+        floorleft.translate(new Vector2(-14.5, -40));
         floorleft.setMass(MassType.INFINITE);
         world.addBody(floorleft);
 
@@ -105,7 +93,7 @@ public class Game extends GameManager {
             BodyFixture bf = new BodyFixture(c);
             floorright.addFixture(bf);
         }
-        floorright.translate(new Vector2(getWidth()/100.8, -8.75));
+        floorright.translate(new Vector2(14.5, -40));
         floorright.setMass(MassType.INFINITE);
         world.addBody(floorright);
 
@@ -270,6 +258,10 @@ public class Game extends GameManager {
         stick1 = new Player("Player 1", -5, 0, world, new Color(44, 100, 232));
         Body control = stick1.getGravityCenter();
 
+        FrictionJoint air = new FrictionJoint(control, background.getBackground(), new Vector2(0,0));
+        air.setMaximumForce(50000);
+        air.setMaximumTorque(50000);
+
         //PLAYER : 2
         stick2 = new Player("Player 2", 5,0, world, new Color(44, 232, 82));
         Body control2 = stick2.getGravityCenter();
@@ -284,20 +276,7 @@ public class Game extends GameManager {
         hud.addPlayerName(stick2.getName(), 16.75, stick2.getColor());
     }
 
-    /**
-     *  MOVE BODY TO POINTER
-     */
-    private void moveBodyToPointer(Body b, Point p, double forceX, double forceY) {
 
-        double bodyPosX = b.getTransform().getTranslationX()+11;
-        double bodyPosY = b.getTransform().getTranslationY()+11;
-        double xPoint = p.x/this.scale;
-        double yPoint = 11-p.y/this.scale;
-        double moveX = -(bodyPosX-xPoint);
-        double moveY = -(bodyPosY-yPoint);
-        System.out.println(bodyPosY+", "+yPoint+", "+moveY);
-        b.applyForce(new Vector2(moveX*forceX,moveY*forceY));
-    }
 
     /**
      *  COLLISION MANAGEMENT
@@ -370,9 +349,9 @@ public class Game extends GameManager {
 
     /** MAIN */
     public static void main(String[] args) {
-        Game simulation = new Game(45);
+        Game game = new Game(45);
 
-        simulation.run();
+        game.run();
     }
     
   
