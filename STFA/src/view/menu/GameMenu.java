@@ -124,15 +124,18 @@ public class GameMenu {
 
 	public void clickOnMenu(double x, double y) {
 
-		synchronized (lockMenuButtons){
+		GameMenuButton toExecute=null;
 
+		synchronized (lockMenuButtons){
 			for(GameMenuButton gmb : menuButtons){
 				if(gmb.isTouched(x,y)){
 					System.out.println(gmb + " is clicked");
-					gmb.execute();
+					toExecute=gmb;
 				}
 			}
 		}
+		if(toExecute != null)
+			toExecute.execute();
 	}
 
 	public void setStartAction (IAction action) { this.startAction = action; }
