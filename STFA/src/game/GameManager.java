@@ -168,7 +168,12 @@ public abstract class GameManager extends JFrame {
                 // perform an infinite loop stopped
                 // render as fast as possible
                 while (!isStopped()) {
-                    gameLoop();
+                    try {
+                        gameLoop();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
                     // you could add a Thread.yield(); or
                     // Thread.sleep(long) here to give the
                     // CPU some breathing room
@@ -212,8 +217,12 @@ public abstract class GameManager extends JFrame {
         // render anything about the simulation (will render the World objects)
         this.render(g, elapsedTime);
         // update the World
-        if(!paused)
+        if(!paused){
+
+            workToDoInGameLoop();
             this.update(g, elapsedTime);
+        }
+
 
         // dispose of the graphics object
         g.dispose();
@@ -361,4 +370,6 @@ public abstract class GameManager extends JFrame {
         // start it
         this.start();
     }
+
+    public abstract void workToDoInGameLoop();
 }

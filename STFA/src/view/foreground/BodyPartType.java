@@ -5,9 +5,10 @@ package view.foreground;
  */
 public enum BodyPartType {
 
-    HEAD, TRUNK,
-    LEFTARM, LEFTHAND, LEFTLEG, LEFTFOOT,
-    RIGHTARM, RIGHTHAND, RIGHTLEG, RIGHTFOOT,
+    HEAD,
+    MEMBER,
+    INVULNERABLE,
+    INERT,
     NONE
 
 }

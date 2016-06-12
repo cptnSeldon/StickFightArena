@@ -33,7 +33,11 @@ public class Player extends Observable{
     double positionX = 1;
     double positionY = 0;
 
+    Collection<RevoluteJoint> joints;
+
     //COLLISION MANAGEMENT
+
+
 
     List<Body> bodyParts;
 
@@ -82,7 +86,7 @@ public class Player extends Observable{
 
     public static int keyStatments;
 
-    Collection<RevoluteJoint> joints;
+
 
     /**
      * PLAYER : CONSTRUCTOR
@@ -119,7 +123,7 @@ public class Player extends Observable{
 
         /** BODY ELEMENTS */
         //HEAD
-        head = new BodyRenderer(color);
+        head = new BodyRenderer(color, BodyPartType.HEAD);
         Convex c = Geometry.createCircle(rHead);
         BodyFixture bf = new BodyFixture(c);
         head.addFixture(bf);
@@ -130,7 +134,7 @@ public class Player extends Observable{
         bodyParts.add(head);
 
         //TRUNK
-        trunk = new BodyRenderer(color);
+        trunk = new BodyRenderer(color, BodyPartType.MEMBER);
         c = Geometry.createRectangle(wTrunk, hTrunk);
         bf = new BodyFixture(c);
         trunk.addFixture(bf);
@@ -141,7 +145,7 @@ public class Player extends Observable{
         bodyParts.add(trunk);
 
         //ARM : left
-        leftArm = new BodyRenderer(color);
+        leftArm = new BodyRenderer(color, BodyPartType.MEMBER);
         c = Geometry.createRectangle(wMember, hMember);
         bf = new BodyFixture(c);
         leftArm.addFixture(bf);
@@ -152,7 +156,7 @@ public class Player extends Observable{
         bodyParts.add(leftArm);
 
         //ARM : right
-        rightArm = new BodyRenderer(color);
+        rightArm = new BodyRenderer(color, BodyPartType.MEMBER);
         c = Geometry.createRectangle(wMember, hMember);
         bf = new BodyFixture(c);
         rightArm.addFixture(bf);
@@ -163,7 +167,7 @@ public class Player extends Observable{
         bodyParts.add(rightArm);
 
         //HAND : left
-        leftHand = new BodyRenderer(color);
+        leftHand = new BodyRenderer(color, BodyPartType.INVULNERABLE);
         c = Geometry.createCircle(rHand);
         bf = new BodyFixture(c);
         leftHand.addFixture(bf);
@@ -178,7 +182,7 @@ public class Player extends Observable{
         joints.add(leftHandLeftArm);
 
         //HAND : right
-        rightHand = new BodyRenderer(color);
+        rightHand = new BodyRenderer(color, BodyPartType.INVULNERABLE);
         c = Geometry.createCircle(rHand);
         bf = new BodyFixture(c);
         rightHand.addFixture(bf);
@@ -193,7 +197,7 @@ public class Player extends Observable{
         joints.add(rightArmRightHand);
 
         //LEG : left
-        leftLeg = new BodyRenderer(color);
+        leftLeg = new BodyRenderer(color, BodyPartType.MEMBER);
         c = Geometry.createRectangle(wMember, hMember);
         bf = new BodyFixture(c);
         leftLeg.addFixture(bf);
@@ -204,7 +208,7 @@ public class Player extends Observable{
         bodyParts.add(leftLeg);
 
         //LEG : right
-        rightLeg = new BodyRenderer(color);
+        rightLeg = new BodyRenderer(color, BodyPartType.MEMBER);
         c = Geometry.createRectangle(wMember, hMember);
         bf = new BodyFixture(c);
         rightLeg.addFixture(bf);
@@ -215,7 +219,7 @@ public class Player extends Observable{
         bodyParts.add(rightLeg);
 
         //FOOT : left
-        leftFoot = new BodyRenderer(color);
+        leftFoot = new BodyRenderer(color, BodyPartType.INVULNERABLE);
         c = Geometry.createCircle(rHand);
         bf = new BodyFixture(c);
         leftFoot.addFixture(bf);
@@ -230,7 +234,7 @@ public class Player extends Observable{
         joints.add(leftFootLeftLeg);
 
         //FOOT : right
-        rightFoot = new BodyRenderer(color);
+        rightFoot = new BodyRenderer(color, BodyPartType.INVULNERABLE);
         c = Geometry.createCircle(rHand);
         bf = new BodyFixture(c);
         rightFoot.addFixture(bf);
@@ -410,7 +414,7 @@ public class Player extends Observable{
      *  BODY : GRAVITY CENTER
      */
     public Body getGravityCenter(){
-        return trunk;
+        return head;
     }
 
     /**
@@ -418,39 +422,8 @@ public class Player extends Observable{
      * @param body
      * @return
      */
-    public BodyPartType getBodyPartType(Body body){
-
-        if(body == head)
-            return BodyPartType.HEAD;
-
-        if(body == trunk)
-            return BodyPartType.TRUNK;
-
-        if(body == leftArm)
-            return BodyPartType.LEFTARM;
-
-        if(body == leftHand)
-            return BodyPartType.LEFTHAND;
-
-        if(body == leftLeg)
-            return BodyPartType.LEFTLEG;
-
-        if(body == leftFoot)
-            return BodyPartType.LEFTFOOT;
-
-        if(body == rightArm)
-            return BodyPartType.RIGHTARM;
-
-        if(body == rightHand)
-            return BodyPartType.RIGHTHAND;
-
-        if(body == rightLeg)
-            return BodyPartType.RIGHTLEG;
-
-        if(body == rightFoot)
-            return BodyPartType.RIGHTFOOT;
-
-        return BodyPartType.NONE;
+    public BodyPartType getBodyPartType(BodyRenderer body){
+        return body.getType();
     }
 
     /**
@@ -504,5 +477,9 @@ public class Player extends Observable{
             //observer notification
         this.setChanged();
         this.notifyObservers(this.lifePoints);
+    }
+
+    public List<Body> getBodyParts() {
+        return bodyParts;
     }
 }

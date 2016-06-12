@@ -27,17 +27,20 @@ public class Background {
 
         this.world = world;
         shapes = new ArrayList<>();
+    }
+
+    public void createBackground () {
+
         background = new BodyRenderer(new Color(0,0,0,95));
         background.addFixture(new BodyFixture(Geometry.createRectangle(100,40)));
-        addShapesToBG(background);
 
+        addShapesToBG(background);
     }
 
     public void createShapes (Body shape, Color color) {
 
         shape = new BodyRenderer(color);
-        shape.addFixture(new BodyFixture(Geometry.createSegment(new Vector2())));
-
+        shape.addFixture(new BodyFixture(Geometry.createSegment(new Vector2(0,5))));
     }
 
     private void addShapesToBG(BodyRenderer br) {

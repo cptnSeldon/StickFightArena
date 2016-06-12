@@ -8,6 +8,7 @@ import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.BodyFixture;
 //import org.dyn4j.examples.View.Graphics2DRenderer;
 import org.dyn4j.geometry.Convex;
+import view.foreground.BodyPartType;
 
 
 public class BodyRenderer extends Body {
@@ -16,12 +17,18 @@ public class BodyRenderer extends Body {
     protected Color color;
     protected Color initColor;
 
+
+
+    /** Type of the body **/
+    protected BodyPartType type;
+
     /**
      * Default constructor.
      */
     public BodyRenderer() {
         // black
         this.color = new Color(0,0,0);
+        this.type = BodyPartType.NONE;
     }
 
     /**
@@ -31,6 +38,18 @@ public class BodyRenderer extends Body {
     public BodyRenderer(Color color) {
         this.initColor = color;
         this.color = color;
+        this.type = BodyPartType.NONE;
+    }
+
+    /**
+     * Constructor.
+     * @param color a set color
+     * @param type a BodyPartType
+     */
+    public BodyRenderer(Color color, BodyPartType type) {
+        this.initColor = color;
+        this.color = color;
+        this.type = type;
     }
 
     /**
@@ -102,5 +121,13 @@ public class BodyRenderer extends Body {
 
         // render the fixture
         Graphics2DRenderer.render(g, convex, scale, color);
+    }
+
+    public BodyPartType getType() {
+        return type;
+    }
+
+    public void setType(BodyPartType type) {
+        this.type = type;
     }
 }

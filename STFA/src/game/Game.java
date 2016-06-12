@@ -19,12 +19,16 @@ import org.dyn4j.geometry.MassType;
 import org.dyn4j.geometry.Vector2;
 import view.background.Background;
 import view.foreground.BodyPartType;
+import view.foreground.Foreground;
 import view.foreground.Player;
 import view.hud.HUD;
 import view.menu.GameMenu;
 import view.menu.IAction;
 
 import java.lang.System;
+import java.util.Calendar;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class Game extends GameManager {
@@ -35,7 +39,9 @@ public class Game extends GameManager {
     public Player stick1;
     public Player stick2;
 
+    Foreground foreground;
     Background background;
+    HUD hud;
 
 
     /**
@@ -51,52 +57,15 @@ public class Game extends GameManager {
      */
     protected void initializeWorld() {
 
+        /** BACKGROUND */
         background = new Background(world);
+        background.createBackground();
 
-        /** FLOORS */
-        //BOTTOM
-        Body floorbot = new BodyRenderer();{
+        /** FOREGROUND */
+        foreground = new Foreground(world);
+        foreground.makeWall();
+        foreground.addSomeInertBodies();
 
-            Convex c = Geometry.createRectangle(100.0, 1.0);
-            BodyFixture bf = new BodyFixture(c);
-            floorbot.addFixture(bf);
-        }
-        floorbot.translate(new Vector2(0, -15.4));
-        floorbot.setMass(MassType.INFINITE);
-        world.addBody(floorbot);
-
-        //TOP
-        Body floortop = new BodyRenderer();{
-
-            Convex c = Geometry.createRectangle(100.0, 1.0);
-            BodyFixture bf = new BodyFixture(c);
-            floortop.addFixture(bf);
-        }
-        floortop.translate(new Vector2(0, 2));
-        floortop.setMass(MassType.INFINITE);
-        world.addBody(floortop);
-
-        //LEFT
-        Body floorleft = new BodyRenderer();{
-
-            Convex c = Geometry.createRectangle(1.0, 100.0);
-            BodyFixture bf = new BodyFixture(c);
-            floorleft.addFixture(bf);
-        }
-        floorleft.translate(new Vector2(-14.5, -40));
-        floorleft.setMass(MassType.INFINITE);
-        world.addBody(floorleft);
-
-        //RIGHT
-        Body floorright = new BodyRenderer();{
-
-            Convex c = Geometry.createRectangle(1.0, 100.0);
-            BodyFixture bf = new BodyFixture(c);
-            floorright.addFixture(bf);
-        }
-        floorright.translate(new Vector2(14.5, -40));
-        floorright.setMass(MassType.INFINITE);
-        world.addBody(floorright);
 
         //GAME MENU
         menu = new GameMenu(world);
@@ -206,10 +175,12 @@ public class Game extends GameManager {
 
                     if(!isPaused()){
                         pause();
+                        hud.pauseChrono();
                         System.out.println("is paused");
 
                      } else {
                         resume();
+                        hud.resumeChrono();
                         System.out.println("is resumed");
                     }
                 }
@@ -228,8 +199,8 @@ public class Game extends GameManager {
             @Override
             public boolean collision(Body body, BodyFixture bodyFixture, Body body1, BodyFixture bodyFixture1) {
 
-                if( stick1 != null && stick1.isAlive() && stick2 != null && stick2.isAlive()) {
-                    collisionManagement(body, body1);
+                if(body.isActive() && body1.isActive()&& stick1 != null && stick1.isAlive() && stick2 != null && stick2.isAlive()) {
+                   collisionManagement(body, body1);
                 }
                 return true;
             }
@@ -254,82 +225,103 @@ public class Game extends GameManager {
     }
 
     public void startGame () {
+
+        //clear
         menu.clear();
+        if(hud != null)
+            hud.clearChrono();
+
         //PLAYER : 1
         stick1 = new Player("Player 1", -5, 0, world, new Color(44, 100, 232));
-        Body control = stick1.getGravityCenter();
-
 
         //PLAYER : 2
         stick2 = new Player("Player 2", 5,0, world, new Color(44, 232, 82));
-        Body control2 = stick2.getGravityCenter();
 
         //HUD
-        HUD hud = new HUD(world);
+        hud = new HUD(world);
 
         hud.addLifePointBar(stick1.getMaxLifePoints(), -5, stick1);
         hud.addLifePointBar(stick2.getMaxLifePoints(),  5, stick2);
 
         hud.addPlayerName(stick1.getName(),  6.75, stick1.getColor());
         hud.addPlayerName(stick2.getName(), 16.75, stick2.getColor());
+
+        hud.addChrono(12.85, Color.black);
     }
 
+    @Override
+    public void workToDoInGameLoop() {
 
+        if(hud != null)
+            hud.updateChrono(12.85, System.currentTimeMillis());
+    }
 
     /**
      *  COLLISION MANAGEMENT
      */
     private void collisionManagement(Body body0, Body body1) {
 
+
+        BodyPartType bpt0;
+        BodyPartType bpt1;
         //INITIALIZATION
-        BodyPartType bpt0 = stick1.getBodyPartType(body0);
-        BodyPartType bpt1 = stick2.getBodyPartType(body1);
+        if(body0 instanceof BodyRenderer){
+            bpt0 = ((BodyRenderer) body0).getType();
+
+
+        }else bpt0 = BodyPartType.NONE;
+
+        if(body1 instanceof BodyRenderer){
+            bpt1 = ((BodyRenderer) body1).getType();
+
+
+        }else bpt1 = BodyPartType.NONE;
+
 
         //TODO : refactor to create a unique method
         //test : check which body part is touched
-        if(bpt0 != BodyPartType.NONE && bpt1 != BodyPartType.NONE){
+        if((bpt0 != BodyPartType.NONE && bpt1 != BodyPartType.NONE)){
 
             BodyRenderer sBody0 = (BodyRenderer)body0;
             BodyRenderer sBody1 = (BodyRenderer)body1;
 
-            //System.out.println("Game 1 touched with " + bpt0 + " Game.Game 2 at " + bpt1);
+            if(stick1.getBodyParts().contains(sBody0) && !stick1.getBodyParts().contains(sBody1)){
+                body0.applyImpulse(0.75);
 
-            //head - hand - foot vs other parts
-            if(stick1.isVulnerable() && ((bpt0 == BodyPartType.HEAD ||
-                    bpt0 == BodyPartType.LEFTHAND || bpt0 == BodyPartType.RIGHTHAND ||
-                    bpt0 == BodyPartType.LEFTFOOT || bpt0 == BodyPartType.RIGHTFOOT) &&
-                   !(bpt1 == BodyPartType.HEAD ||
-                    bpt1 == BodyPartType.LEFTHAND || bpt1 == BodyPartType.RIGHTHAND ||
-                    bpt1 == BodyPartType.LEFTFOOT || bpt1 == BodyPartType.RIGHTFOOT))) {
+                if((bpt0 == BodyPartType.MEMBER || bpt0 == BodyPartType.HEAD) && stick1.isVulnerable()){
+                    stick1.applyDamage(1, sBody0);
+                }
 
 
-                stick1.applyDamage(stick2.getDamageOut(), sBody1);
-                System.out.println("Game 1 Life : " + stick1.getLifePoints());
-
-                //System.out.println("Game 1 inflicts damages to Game.Game 2");
             }
 
-            //STICKMAN 2
-            //head - hand - foot vs other parts
-            if(stick2.isVulnerable()&& ((bpt1 == BodyPartType.HEAD ||
-                    bpt1 == BodyPartType.LEFTHAND || bpt1 == BodyPartType.RIGHTHAND ||
-                    bpt1 == BodyPartType.LEFTFOOT || bpt1 == BodyPartType.RIGHTFOOT) &&
-                   !(bpt0 == BodyPartType.HEAD ||
-                    bpt0 == BodyPartType.LEFTHAND || bpt0 == BodyPartType.RIGHTHAND ||
-                    bpt0 == BodyPartType.LEFTFOOT || bpt0 == BodyPartType.RIGHTFOOT))) {
+            if(stick1.getBodyParts().contains(sBody1) && !stick1.getBodyParts().contains(sBody0)){
+                body1.applyImpulse(0.75);
+                if((bpt1 == BodyPartType.MEMBER || bpt1 == BodyPartType.HEAD) && stick1.isVulnerable()){
+                    stick1.applyDamage(1, sBody1);
+                }
+            }
 
+            if(stick2.getBodyParts().contains(sBody0) && !stick2.getBodyParts().contains(sBody1)){
+                body0.applyImpulse(0.75);
+                if((bpt0 == BodyPartType.MEMBER || bpt0 == BodyPartType.HEAD) && stick2.isVulnerable()){
+                    stick2.applyDamage(1, sBody0);
+                }
+            }
 
-                stick2.applyDamage(stick1.getDamageOut(),sBody0);
-                System.out.println("Game.Game 2 Life : " + stick2.getLifePoints());
+            if(stick2.getBodyParts().contains(sBody1) && !stick2.getBodyParts().contains(sBody0)){
+                body1.applyImpulse(0.75);
+                if((bpt1 == BodyPartType.MEMBER || bpt1 == BodyPartType.HEAD) && stick2.isVulnerable()){
+                    stick2.applyDamage(1, sBody1);
+                }
             }
 
                 //end menu
-            if(stick1 != null && !stick1.isAlive() || stick2 != null && !stick2.isAlive())
+            if(stick1 != null && !stick1.isAlive() || stick2 != null && !stick2.isAlive()){
                 menu.showEndMenu();
+                hud.pauseChrono();
+            }
 
-            //TODO : new method allowing impulse customization
-            body0.applyImpulse(0.75);
-            body1.applyImpulse(0.75);
 
             return;
         }
