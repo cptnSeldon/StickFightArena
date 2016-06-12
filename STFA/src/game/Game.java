@@ -1,5 +1,6 @@
 package game;
 
+import java.applet.AudioClip;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -42,6 +43,8 @@ public class Game extends GameManager {
     Foreground foreground;
     Background background;
     HUD hud;
+
+    AudioClip music;
 
 
     /**
@@ -247,6 +250,10 @@ public class Game extends GameManager {
         hud.addPlayerName(stick2.getName(), 16.75, stick2.getColor());
 
         hud.addChrono(12.85, Color.black);
+
+        //MUSIC
+        //Sounds.playSound("/resources/fightmusic.wav");
+
     }
 
     @Override

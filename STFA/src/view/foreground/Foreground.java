@@ -75,13 +75,10 @@ public class Foreground {
     }
 
     public void addSomeInertBodies(){
-        Body square1 = new BodyRenderer(Color.BLUE, BodyPartType.INERT);
-        square1.addFixture(new BodyFixture(Geometry.createRectangle(0.5,0.5)));
+        Body square1 = new BodyRenderer(Color.BLACK, BodyPartType.INERT);
+        square1.addFixture(new BodyFixture(Geometry.createRectangle(5,5)));
         square1.translate(new Vector2(-2,-2));
-        square1.setMass(MassType.INFINITE);
+        square1.setMass(MassType.NORMAL);
         world.addBody(square1);
-
     }
-
-
 }
