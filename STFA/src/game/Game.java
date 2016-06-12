@@ -13,7 +13,6 @@ import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.BodyFixture;
 import org.dyn4j.dynamics.CollisionListener;
 import org.dyn4j.dynamics.contact.ContactConstraint;
-import org.dyn4j.dynamics.joint.FrictionJoint;
 import org.dyn4j.geometry.Convex;
 import org.dyn4j.geometry.Geometry;
 import org.dyn4j.geometry.MassType;
@@ -38,6 +37,7 @@ public class Game extends GameManager {
 
     Background background;
 
+
     /**
      * GAME : CONSTRUCTOR
      * @param scale
@@ -52,6 +52,7 @@ public class Game extends GameManager {
     protected void initializeWorld() {
 
         background = new Background(world);
+
         /** FLOORS */
         //BOTTOM
         Body floorbot = new BodyRenderer();{
@@ -258,9 +259,6 @@ public class Game extends GameManager {
         stick1 = new Player("Player 1", -5, 0, world, new Color(44, 100, 232));
         Body control = stick1.getGravityCenter();
 
-        FrictionJoint air = new FrictionJoint(control, background.getBackground(), new Vector2(0,0));
-        air.setMaximumForce(50000);
-        air.setMaximumTorque(50000);
 
         //PLAYER : 2
         stick2 = new Player("Player 2", 5,0, world, new Color(44, 232, 82));

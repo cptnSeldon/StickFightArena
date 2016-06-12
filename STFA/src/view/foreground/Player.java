@@ -116,6 +116,7 @@ public class Player extends Observable{
 
         joints = new ArrayList<>();
 
+
         /** BODY ELEMENTS */
         //HEAD
         head = new BodyRenderer(color);
