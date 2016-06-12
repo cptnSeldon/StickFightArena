@@ -51,7 +51,10 @@ public class Game extends GameManager {
      */
     protected void initializeWorld() {
 
-        background = new Background(world);
+        /** BACKGROUND */
+        Background background = new Background(world);
+        background.createBackground();
+
         /** FLOORS */
         //BOTTOM
         Body floorbot = new BodyRenderer();{
