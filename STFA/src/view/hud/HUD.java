@@ -2,14 +2,10 @@ package view.hud;
 
 import org.dyn4j.dynamics.World;
 import org.dyn4j.geometry.TextShape;
-import sun.util.resources.cldr.ru.CalendarData_ru_RU;
 import view.BodyRenderer;
-import view.foreground.Player;
-
 import java.awt.*;
 import java.util.Calendar;
 import java.util.Observable;
-import java.util.Observer;
 
 /**
  *  view.hud.HUD : Head Up Display

@@ -31,7 +31,7 @@ public class Background {
 
     public void createBackground () {
 
-        background = new BodyRenderer(new Color(0,0,0,95));
+        background = new BodyRenderer(new Color(50,50,255,95));
         background.addFixture(new BodyFixture(Geometry.createRectangle(100,40)));
 
         addShapesToBG(background);

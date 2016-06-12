@@ -109,7 +109,7 @@ public class GameMenu {
 		BodyRenderer messageEnd = new BodyRenderer(this.messageColor);
 
 		background.addFixture(new BodyFixture(Geometry.createRectangle(100,40)));
-		messageEnd.addFixture(new BodyFixture(new TextShape(11,7,this.messageSize,"GAME OVER")));
+		messageEnd.addFixture(new BodyFixture(new TextShape(8,7,this.messageSize,"GAME OVER")));
 
 		addObjectToGame(background);
 		addObjectToGame(messageEnd);

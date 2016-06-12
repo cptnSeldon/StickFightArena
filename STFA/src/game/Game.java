@@ -52,7 +52,7 @@ public class Game extends GameManager {
      * @param scale
      */
     Game(double scale){
-        super("game", scale);
+        super("StickFightArena", scale);
     }
 
     /**
