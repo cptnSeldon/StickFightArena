@@ -409,7 +409,7 @@ public class Player extends Observable{
      *  BODY : GRAVITY CENTER
      */
     public Body getGravityCenter(){
-        return trunk;
+        return head;
     }
 
     /**

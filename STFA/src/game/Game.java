@@ -26,6 +26,9 @@ import view.menu.GameMenu;
 import view.menu.IAction;
 
 import java.lang.System;
+import java.util.Calendar;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class Game extends GameManager {
@@ -37,6 +40,7 @@ public class Game extends GameManager {
     public Player stick2;
 
     Background background;
+    HUD hud;
 
     /**
      * GAME : CONSTRUCTOR
@@ -52,7 +56,7 @@ public class Game extends GameManager {
     protected void initializeWorld() {
 
         /** BACKGROUND */
-        Background background = new Background(world);
+        background = new Background(world);
         background.createBackground();
 
         /** FLOORS */
@@ -208,10 +212,12 @@ public class Game extends GameManager {
 
                     if(!isPaused()){
                         pause();
+                        hud.pauseChrono();
                         System.out.println("is paused");
 
                      } else {
                         resume();
+                        hud.resumeChrono();
                         System.out.println("is resumed");
                     }
                 }
@@ -230,8 +236,8 @@ public class Game extends GameManager {
             @Override
             public boolean collision(Body body, BodyFixture bodyFixture, Body body1, BodyFixture bodyFixture1) {
 
-                if( stick1 != null && stick1.isAlive() && stick2 != null && stick2.isAlive()) {
-                    collisionManagement(body, body1);
+                if(body.isActive() && body1.isActive()&& stick1 != null && stick1.isAlive() && stick2 != null && stick2.isAlive()) {
+                   collisionManagement(body, body1);
                 }
                 return true;
             }
@@ -256,30 +262,36 @@ public class Game extends GameManager {
     }
 
     public void startGame () {
+
+        //clear
         menu.clear();
+        if(hud != null)
+            hud.clearChrono();
+
         //PLAYER : 1
         stick1 = new Player("Player 1", -5, 0, world, new Color(44, 100, 232));
-        Body control = stick1.getGravityCenter();
-
-        FrictionJoint air = new FrictionJoint(control, background.getBackground(), new Vector2(0,0));
-        air.setMaximumForce(50000);
-        air.setMaximumTorque(50000);
 
         //PLAYER : 2
         stick2 = new Player("Player 2", 5,0, world, new Color(44, 232, 82));
-        Body control2 = stick2.getGravityCenter();
 
         //HUD
-        HUD hud = new HUD(world);
+        hud = new HUD(world);
 
         hud.addLifePointBar(stick1.getMaxLifePoints(), -5, stick1);
         hud.addLifePointBar(stick2.getMaxLifePoints(),  5, stick2);
 
         hud.addPlayerName(stick1.getName(),  6.75, stick1.getColor());
         hud.addPlayerName(stick2.getName(), 16.75, stick2.getColor());
+
+        hud.addChrono(12.85, Color.black);
     }
 
+    @Override
+    public void workToDoInGameLoop() {
 
+        if(hud != null)
+            hud.updateChrono(12.85, System.currentTimeMillis());
+    }
 
     /**
      *  COLLISION MANAGEMENT
@@ -329,8 +341,11 @@ public class Game extends GameManager {
             }
 
                 //end menu
-            if(stick1 != null && !stick1.isAlive() || stick2 != null && !stick2.isAlive())
+            if(stick1 != null && !stick1.isAlive() || stick2 != null && !stick2.isAlive()){
                 menu.showEndMenu();
+                hud.pauseChrono();
+            }
+
 
             //TODO : new method allowing impulse customization
             body0.applyImpulse(0.75);
