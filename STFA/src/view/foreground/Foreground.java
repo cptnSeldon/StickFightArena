@@ -75,10 +75,34 @@ public class Foreground {
     }
 
     public void addSomeInertBodies(){
-        Body square1 = new BodyRenderer(Color.BLACK, BodyPartType.INERT);
+        Body square1 = new BodyRenderer(Color.YELLOW, BodyPartType.INERT);
         square1.addFixture(new BodyFixture(Geometry.createRectangle(5,5)));
-        square1.translate(new Vector2(-2,-2));
-        square1.setMass(MassType.NORMAL);
+        square1.translate(new Vector2(3,-5));
+        square1.setMass(MassType.FIXED_LINEAR_VELOCITY);
         world.addBody(square1);
+
+
+        Body square2 = new BodyRenderer(Color.BLACK, BodyPartType.INERT);
+        square2.addFixture(new BodyFixture(Geometry.createRectangle(1,1)));
+        square2.translate(new Vector2(-6,-3));
+        square2.setMass(MassType.INFINITE);
+        world.addBody(square2);
+
+
+        for(int i = 0; i < 300; i++){
+            Body b = new BodyRenderer(Color.ORANGE, BodyPartType.NONE);
+            b.addFixture(new BodyFixture(Geometry.createPolygonalCircle(7, 0.2)));
+            b.translate(new Vector2(-6,-3));
+            b.setMass(MassType.NORMAL);
+            world.addBody(b);
+        }
+
+        for(int i = 0; i < 20; i++){
+            Body b = new BodyRenderer(Color.RED, BodyPartType.INERT);
+            b.addFixture(new BodyFixture(Geometry.createPolygonalCircle(7, 0.2)));
+            b.translate(new Vector2(-5,-1));
+            b.setMass(MassType.NORMAL);
+            world.addBody(b);
+        }
     }
 }
