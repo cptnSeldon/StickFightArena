@@ -75,7 +75,7 @@ public class Foreground {
     }
 
     public void addSomeInertBodies(){
-        Body square1 = new BodyRenderer(Color.YELLOW, BodyPartType.INERT);
+        Body square1 = new BodyRenderer(Color.YELLOW, BodyPartType.NONE);
         square1.addFixture(new BodyFixture(Geometry.createRectangle(5,5)));
         square1.translate(new Vector2(3,-5));
         square1.setMass(MassType.FIXED_LINEAR_VELOCITY);
@@ -89,7 +89,7 @@ public class Foreground {
         world.addBody(square2);
 
 
-        for(int i = 0; i < 300; i++){
+        for(int i = 0; i < 200; i++){
             Body b = new BodyRenderer(Color.ORANGE, BodyPartType.NONE);
             b.addFixture(new BodyFixture(Geometry.createPolygonalCircle(7, 0.2)));
             b.translate(new Vector2(-6,-3));
