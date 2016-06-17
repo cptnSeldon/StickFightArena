@@ -89,9 +89,9 @@ public class Foreground {
         world.addBody(square2);
 
 
-        for(int i = 0; i < 200; i++){
+        for(int i = 0; i < 600; i++){
             Body b = new BodyRenderer(Color.ORANGE, BodyPartType.NONE);
-            b.addFixture(new BodyFixture(Geometry.createPolygonalCircle(7, 0.2)));
+            b.addFixture(new BodyFixture(Geometry.createPolygonalCircle(5, 0.2)));
             b.translate(new Vector2(-6,-3));
             b.setMass(MassType.NORMAL);
             world.addBody(b);
