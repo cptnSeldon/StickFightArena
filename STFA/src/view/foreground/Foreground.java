@@ -27,6 +27,11 @@ public class Foreground {
         this.world = world;
     }
 
+    /**
+     * TODO : make wall position dependant of the windows definition
+     * Add walls to the edge
+     */
+
     public void makeWall(){
         /** FLOORS */
         //BOTTOM
@@ -73,6 +78,13 @@ public class Foreground {
         floorright.setMass(MassType.INFINITE);
         world.addBody(floorright);
     }
+
+    /**
+     * TODO : Refactor this function for taking bodies in dynamic source
+     *
+     * Add bodies in the world
+     * Bodies are hard coded for the moment, that's bad :(
+     */
 
     public void addSomeInertBodies(){
         Body square1 = new BodyRenderer(Color.YELLOW, BodyPartType.NONE);
