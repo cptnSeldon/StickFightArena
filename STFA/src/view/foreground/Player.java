@@ -89,7 +89,7 @@ public class Player extends Observable{
 
 
     /**
-     * PLAYER : CONSTRUCTOR
+     * PLAYER : CONSTRUCTOR, Add the stickman in the world
      * @param positionX
      * @param positionY
      * @param world
@@ -339,10 +339,10 @@ public class Player extends Observable{
 
     /**
      * DELETE DIRECTION
-     * @param up
-     * @param down
-     * @param right
-     * @param left
+     * @param up : boolean if key direction up is pressed
+     * @param down : boolean if key direction down is pressed
+     * @param right : boolean if key direction right is pressed
+     * @param left : boolean if key direction left is pressed
      */
     public void delDirection(boolean up, boolean down, boolean right, boolean left){
         directionKeys[0] = (!up & directionKeys[0]);
@@ -435,6 +435,9 @@ public class Player extends Observable{
         }
     }
 
+    /**
+     * Remove the player of the world
+     */
     public void removePlayer() {
 
         for(Body bodyPart : bodyParts){

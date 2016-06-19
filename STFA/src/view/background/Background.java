@@ -29,6 +29,9 @@ public class Background {
         shapes = new ArrayList<>();
     }
 
+    /**
+     * Create a background and add some shapes
+     */
     public void createBackground () {
 
         background = new BodyRenderer(new Color(50,50,255,95));
@@ -37,12 +40,22 @@ public class Background {
         addShapesToBG(background);
     }
 
+    /**
+     * Create some Shapes
+     * @param shape
+     * @param color
+     */
+
     public void createShapes (Body shape, Color color) {
 
         shape = new BodyRenderer(color);
         shape.addFixture(new BodyFixture(Geometry.createSegment(new Vector2(0,5))));
     }
 
+    /**
+     * Add Shape to background
+     * @param br : shape to add
+     */
     private void addShapesToBG(BodyRenderer br) {
 
         br.setActive(false);
