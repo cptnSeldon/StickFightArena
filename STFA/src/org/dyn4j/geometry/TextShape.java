@@ -31,11 +31,13 @@ public class TextShape extends AbstractShape implements Convex, Shape, Transform
 	protected TextShape(double radius) {
 		super(radius);
 	}
+
 	public TextShape(double x, double y, int scale ,String text) {
 		this(new Vector2(x,y),5,text);
 		this.textScale = scale;
 	}
 	public String getText() {return text;}
+
 	public int getTextScale() {return textScale;}
 	/* (non-Javadoc)
 	 * @see org.dyn4j.geometry.Shape#getRadius(org.dyn4j.geometry.Vector2)

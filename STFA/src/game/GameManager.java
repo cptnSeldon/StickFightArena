@@ -25,7 +25,7 @@ package game;
  *
  *
  *
- * Modified by Julia Nemeth, Cyril Ruedin
+ * Modified by Julia Németh, Cyril Ruedin
  */
 
 import java.awt.*;
@@ -124,7 +124,7 @@ public abstract class GameManager extends JFrame {
      */
 
     /**
-     * MOUSE : LISTENER
+     * Mouse listener to canvas
      * @param ml
      */
     public void addMouseListenerToCanvas(MouseListener ml){
@@ -132,7 +132,7 @@ public abstract class GameManager extends JFrame {
     }
 
     /**
-     * MOUSE MOTION : LISTENER
+     * Mouse motion listener : not used yet
      * @param mml
      */
     public void addMouseMotionToCanvas(MouseMotionListener mml){
@@ -140,7 +140,7 @@ public abstract class GameManager extends JFrame {
     }
 
     /**
-     *  KEY : LISTENER
+     *  Key listener to canvas
      * @param kl
      */
     public void addKeyListenerToCanvas(KeyListener kl){
@@ -226,7 +226,6 @@ public abstract class GameManager extends JFrame {
             workToDoInGameLoop();
             this.update(g, elapsedTime);
         }
-
 
         // dispose of the graphics object
         g.dispose();
@@ -330,6 +329,7 @@ public abstract class GameManager extends JFrame {
 
     /**
      * Pauses the simulation.
+     * Show menu
      */
     public synchronized void pause() {
     	if(!paused){
@@ -337,6 +337,11 @@ public abstract class GameManager extends JFrame {
             this.menu.showPause();
     	}
     }
+
+    /**
+     * Resumes the simulation
+     * Clears menu
+     */
     public synchronized void resume() {
 
         this.paused = false;

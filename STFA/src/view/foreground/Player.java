@@ -36,9 +36,6 @@ public class Player extends Observable{
     Collection<RevoluteJoint> joints;
 
     //COLLISION MANAGEMENT
-
-
-
     List<Body> bodyParts;
 
     Body head;              //-> inflicts damage
@@ -86,10 +83,9 @@ public class Player extends Observable{
 
     public static int keyStatments;
 
-
-
     /**
-     * PLAYER : CONSTRUCTOR, Add the stickman in the world
+     * Constructor
+     * Adds the stickman into the world
      * @param positionX
      * @param positionY
      * @param world
@@ -119,7 +115,6 @@ public class Player extends Observable{
         this.isDragged = false;
 
         joints = new ArrayList<>();
-
 
         /** BODY ELEMENTS */
         //HEAD
@@ -320,7 +315,7 @@ public class Player extends Observable{
     }
 
     /**
-     * ADD DIRECTION
+     * Tells the stickman where to move using keys
      * @param up
      * @param down
      * @param right
@@ -338,7 +333,7 @@ public class Player extends Observable{
     }
 
     /**
-     * DELETE DIRECTION
+     * Helps in direction changes
      * @param up : boolean if key direction up is pressed
      * @param down : boolean if key direction down is pressed
      * @param right : boolean if key direction right is pressed
@@ -353,7 +348,7 @@ public class Player extends Observable{
     }
 
     /**
-     * UPDATE DIRECTION FORCE
+     * Updates the direction's force using keys
      */
     private void updateDirectionForce(){
 
@@ -372,9 +367,7 @@ public class Player extends Observable{
             dHor = -force;
         }
 
-
         this.getGravityCenter().applyForce(new Vector2(dHor, dVert));
-
     }
 
 
@@ -410,24 +403,12 @@ public class Player extends Observable{
         //getter
     public boolean playerIsDragged(){ return this.isDragged; }
 
-    /**
-     *  BODY : GRAVITY CENTER
-     */
     public Body getGravityCenter(){
         return head;
     }
 
     /**
-     * GET BODY PART TYPE
-     * @param body
-     * @return
-     */
-    public BodyPartType getBodyPartType(BodyRenderer body){
-        return body.getType();
-    }
-
-    /**
-     *  DEMEMBRATE : when end of game
+     *  Demembrates stickman if first to die
      */
     public void demembrate(){
         for(RevoluteJoint joint : joints){
@@ -436,7 +417,7 @@ public class Player extends Observable{
     }
 
     /**
-     * Remove the player of the world
+     * Removes stickman from the world
      */
     public void removePlayer() {
 

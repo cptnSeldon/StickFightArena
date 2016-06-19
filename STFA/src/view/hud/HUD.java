@@ -8,13 +8,11 @@ import java.util.Calendar;
 import java.util.Observable;
 
 /**
- *  view.hud.HUD : Head Up Display
+ *  Head Up Display
  */
 public class HUD {
 
-    /**
-     *  ATTRIBUTES
-     */
+    /** ATTRIBUTES */
     World world;
     BodyRenderer chrono;
     boolean chronoIsPaused;
@@ -23,11 +21,7 @@ public class HUD {
     Object lockHUD;
 
     /**
-     *  METHODS
-     */
-
-    /**
-     *
+     * Constructor
      * @param world
      */
     public HUD(World world){
@@ -35,7 +29,7 @@ public class HUD {
     }
 
     /**
-     *
+     * Adds a life points bar
      * @param maxLifePoints
      */
     public void addLifePointBar(int maxLifePoints, int posX, Observable player){
@@ -52,6 +46,12 @@ public class HUD {
         player.addObserver(lifePointBar);
     }
 
+    /**
+     * Adds player name
+     * @param name
+     * @param posX
+     * @param color
+     */
     public void addPlayerName(String name, double posX, Color color) {
 
         //TEXT
@@ -61,6 +61,11 @@ public class HUD {
         world.addBody(br);
     }
 
+    /**
+     * Adds chrono
+     * @param posX
+     * @param color
+     */
     public void addChrono(double posX, Color color) {
 
         chronoIsPaused = false;
@@ -73,6 +78,11 @@ public class HUD {
         world.addBody(chrono);
     }
 
+    /**
+     * Updates chrono
+     * @param posX
+     * @param timeInMillis
+     */
     public void updateChrono(double posX, long timeInMillis) {
 
         if(chrono != null && !chronoIsPaused) {
@@ -81,6 +91,9 @@ public class HUD {
         }
     }
 
+    /**
+     * Pauses chrono
+     */
     public void pauseChrono () {
 
         chronoIsPaused = true;
@@ -88,12 +101,21 @@ public class HUD {
         pausedTime = System.currentTimeMillis();
 
     }
+
+    /**
+     * Resumes chrono
+     */
     public void resumeChrono() {
 
         chronoIsPaused = false;
         startTime += System.currentTimeMillis() - pausedTime;
     }
 
+    /**
+     * Gets formated date string, used in the chrono
+     * @param timeInMillis
+     * @return
+     */
     private String getDateString(long timeInMillis) {
 
         Calendar calendar = Calendar.getInstance();
@@ -107,6 +129,9 @@ public class HUD {
 
     }
 
+    /**
+     * Clears chrono
+     */
     public void clearChrono () {
 
         world.removeBody(chrono);

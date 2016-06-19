@@ -14,10 +14,6 @@ import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.BodyFixture;
 import org.dyn4j.dynamics.CollisionListener;
 import org.dyn4j.dynamics.contact.ContactConstraint;
-import org.dyn4j.geometry.Convex;
-import org.dyn4j.geometry.Geometry;
-import org.dyn4j.geometry.MassType;
-import org.dyn4j.geometry.Vector2;
 import view.background.Background;
 import view.foreground.BodyPartType;
 import view.foreground.Foreground;
@@ -27,9 +23,6 @@ import view.menu.GameMenu;
 import view.menu.IAction;
 
 import java.lang.System;
-import java.util.Calendar;
-import java.util.Timer;
-import java.util.TimerTask;
 
 
 public class Game extends GameManager {
@@ -228,7 +221,7 @@ public class Game extends GameManager {
     }
 
     /**
-     * Start the game
+     * Starts the game
      * Create Stickman and HUD
      */
     public void startGame () {
@@ -260,6 +253,10 @@ public class Game extends GameManager {
 
     }
 
+    /**
+     * Synchronization with the game loop
+     * Update chrono
+     */
     @Override
     public void workToDoInGameLoop() {
 
@@ -268,8 +265,10 @@ public class Game extends GameManager {
     }
 
     /**
-     *  COLLISION MANAGEMENT
+     * Manages the collisions
      *  TODO : avanced damage calculation
+     * @param body0
+     * @param body1
      */
     private void collisionManagement(Body body0, Body body1) {
 

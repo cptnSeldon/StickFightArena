@@ -17,7 +17,7 @@ public class LifeBarPoints extends BodyRenderer implements Observer {
 	private int maxlife ;
 
 	/**
-	 *
+	 * Constructor
 	 * @param totalLife
 	 * @param color
      */
@@ -29,7 +29,7 @@ public class LifeBarPoints extends BodyRenderer implements Observer {
 	}
 
 	/**
-	 * lEFEBAR : SET LIFE
+	 * Sets life in life bar
 	 * @param life
      */
 	public void setLife(int life) {
@@ -45,7 +45,7 @@ public class LifeBarPoints extends BodyRenderer implements Observer {
 	}
 
 	/**
-	 * LIFEBAR : GET WIDTH
+	 * Gets life bar width
 	 * @param life
 	 * @return
      */
@@ -55,7 +55,7 @@ public class LifeBarPoints extends BodyRenderer implements Observer {
 	}
 
 	/**
-	 * OBSERVER : update
+	 * Updates life regarding the player's life
 	 * @param player
 	 * @param life
      */

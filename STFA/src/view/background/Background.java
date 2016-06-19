@@ -1,12 +1,8 @@
 package view.background;
 
-import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.BodyFixture;
 import org.dyn4j.dynamics.World;
-import org.dyn4j.geometry.Convex;
 import org.dyn4j.geometry.Geometry;
-import org.dyn4j.geometry.MassType;
-import org.dyn4j.geometry.Vector2;
 import view.BodyRenderer;
 
 import java.awt.*;
@@ -18,11 +14,13 @@ public class Background {
     /** ATTRIBUTES */
     private World world;
 
+    private BodyRenderer background;
+    private List<BodyRenderer> shapes;
 
-
-    BodyRenderer background;
-    List<BodyRenderer> shapes;
-
+    /**
+     * Constructor
+     * @param world
+     */
     public Background (World world) {
 
         this.world = world;
@@ -30,7 +28,7 @@ public class Background {
     }
 
     /**
-     * Create a background and add some shapes
+     * Creates a background and add some shapes
      */
     public void createBackground () {
 
@@ -41,19 +39,7 @@ public class Background {
     }
 
     /**
-     * Create some Shapes
-     * @param shape
-     * @param color
-     */
-
-    public void createShapes (Body shape, Color color) {
-
-        shape = new BodyRenderer(color);
-        shape.addFixture(new BodyFixture(Geometry.createSegment(new Vector2(0,5))));
-    }
-
-    /**
-     * Add Shape to background
+     * Adds Shape to background
      * @param br : shape to add
      */
     private void addShapesToBG(BodyRenderer br) {
@@ -63,7 +49,4 @@ public class Background {
         world.addBody(br);
     }
 
-    public BodyRenderer getBackground() {
-        return background;
-    }
 }

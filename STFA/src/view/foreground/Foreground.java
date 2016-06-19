@@ -16,16 +16,12 @@ import java.awt.Color;
 
 import java.util.*;
 
-/**
- *  this will display the GAME
- */
 public class Foreground {
 
     World world;
 
     /**
-     * Foreground Construct
-     * The foregroud is empty after construct
+     * Constructor
      * @param world
      */
     public Foreground(World world) {
@@ -34,9 +30,8 @@ public class Foreground {
 
     /**
      * TODO : make wall position dependant of the windows definition
-     * Add walls to the edge
+     * Adds walls to the window's edge
      */
-
     public void makeWall(){
         /** FLOORS */
         //BOTTOM
@@ -86,11 +81,9 @@ public class Foreground {
 
     /**
      * TODO : Refactor this function for taking bodies in dynamic source
-     *
-     * Add bodies in the world
+     * Adds bodies into the world
      * Bodies are hard coded for the moment, that's bad :(
      */
-
     public void addSomeInertBodies(){
         Body square1 = new BodyRenderer(Color.YELLOW, BodyPartType.NONE);
         square1.addFixture(new BodyFixture(Geometry.createRectangle(5,5)));
@@ -98,13 +91,11 @@ public class Foreground {
         square1.setMass(MassType.FIXED_LINEAR_VELOCITY);
         world.addBody(square1);
 
-
         Body square2 = new BodyRenderer(Color.BLACK, BodyPartType.INERT);
         square2.addFixture(new BodyFixture(Geometry.createRectangle(1,1)));
         square2.translate(new Vector2(-6,-3));
         square2.setMass(MassType.INFINITE);
         world.addBody(square2);
-
 
         for(int i = 0; i < 200; i++){
             Body b = new BodyRenderer(Color.ORANGE, BodyPartType.NONE);

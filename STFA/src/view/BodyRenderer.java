@@ -19,8 +19,6 @@ public class BodyRenderer extends Body {
     protected Color color;
     protected Color initColor;
 
-
-
     /** Type of the body **/
     protected BodyPartType type;
 

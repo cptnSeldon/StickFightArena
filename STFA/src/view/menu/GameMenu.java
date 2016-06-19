@@ -13,7 +13,7 @@ import java.util.List;
 
 public class GameMenu {
 
-
+	/** ATTRIBUTES */
 	private World world;
 	private List<BodyRenderer> menuObjects;
 	private List<GameMenuButton> menuButtons;
@@ -31,6 +31,10 @@ public class GameMenu {
 	private Color messageColor;
 	private int messageSize;
 
+	/**
+	 * Constructor
+	 * @param world
+     */
 	public GameMenu(World world) {
 
 		this.lockMenuButtons = new Object();
@@ -42,6 +46,10 @@ public class GameMenu {
 		this.messageSize = 90;
 	}
 
+	/**
+	 * Adds objects to the world
+	 * @param br
+     */
 	private void addObjectToGame(BodyRenderer br) {
 
 		br.setActive(false);
@@ -49,6 +57,11 @@ public class GameMenu {
 		world.addBody(br);
 	}
 
+	/**
+	 * Adds menu buttons to the world
+	 * @param gmb
+	 * @param action
+     */
 	private void addGameMenuButtonToGame(GameMenuButton gmb, IAction action) {
 
 		synchronized (lockMenuButtons){
@@ -61,7 +74,9 @@ public class GameMenu {
 		}
 	}
 
-	//MAIN MENU
+	/**
+	 * Shows MAIN MENU
+	 */
 	public void showStartMenu () {
 		this.clear();
 
@@ -81,7 +96,9 @@ public class GameMenu {
 		addGameMenuButtonToGame(quitGame, quitAction);
 	}
 
-	//PAUSE MENU
+	/**
+	 * Shows PAUSE MENU
+	 */
 	public void showPause() {
 		this.clear();
 
@@ -101,7 +118,9 @@ public class GameMenu {
 		addGameMenuButtonToGame(quitGame, quitAction);
 	}
 
-	//END MENU
+	/**
+	 * Shows END MENU
+	 */
 	public void showEndMenu () {
 
 		this.clear();
@@ -122,6 +141,11 @@ public class GameMenu {
 
 	}
 
+	/**
+	 * Executes action in GameMenuButton if touched + exists
+	 * @param x
+	 * @param y
+     */
 	public void clickOnMenu(double x, double y) {
 
 		GameMenuButton toExecute=null;
@@ -138,14 +162,33 @@ public class GameMenu {
 			toExecute.execute();
 	}
 
+	/**
+	 * Start Action definition
+	 * @param action
+     */
 	public void setStartAction (IAction action) { this.startAction = action; }
 
+	/**
+	 * Continue Action definition
+	 * @param action
+     */
 	public void setContinueAction (IAction action) { this.continueAction = action; }
 
+	/**
+	 * Quit Action definition
+	 * @param action
+     */
 	public void setQuitAction (IAction action) { this.quitAction = action; }
 
+	/**
+	 * Set Baxk To Start Action definition
+	 * @param action
+     */
 	public void setBackToStartMenuAction (IAction action) { this.backToStartMenuAction = action; }
 
+	/**
+	 * Clears the menu when in game
+	 */
 	public void clear() {
 
 		for (BodyRenderer br : menuObjects) {
