@@ -227,6 +227,10 @@ public class Game extends GameManager {
 
     }
 
+    /**
+     * Start the game
+     * Create Stickman and HUD
+     */
     public void startGame () {
 
         //clear
@@ -265,6 +269,7 @@ public class Game extends GameManager {
 
     /**
      *  COLLISION MANAGEMENT
+     *  TODO : avanced damage calculation
      */
     private void collisionManagement(Body body0, Body body1) {
 

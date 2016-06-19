@@ -10,7 +10,9 @@ import org.dyn4j.dynamics.BodyFixture;
 import org.dyn4j.geometry.Convex;
 import view.foreground.BodyPartType;
 
-
+/**
+ * Inspired by Dyn4J example
+ */
 public class BodyRenderer extends Body {
 
     /** The color of the object */
