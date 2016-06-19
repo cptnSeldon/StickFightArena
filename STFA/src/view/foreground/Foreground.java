@@ -23,6 +23,11 @@ public class Foreground {
 
     World world;
 
+    /**
+     * Foreground Construct
+     * The foregroud is empty after construct
+     * @param world
+     */
     public Foreground(World world) {
         this.world = world;
     }
@@ -104,7 +109,7 @@ public class Foreground {
         for(int i = 0; i < 200; i++){
             Body b = new BodyRenderer(Color.ORANGE, BodyPartType.NONE);
             b.addFixture(new BodyFixture(Geometry.createPolygonalCircle(7, 0.2)));
-            b.translate(new Vector2(-6,-3));
+            b.translate(new Vector2(-0.03*i,-3));
             b.setMass(MassType.NORMAL);
             world.addBody(b);
         }
@@ -112,7 +117,7 @@ public class Foreground {
         for(int i = 0; i < 20; i++){
             Body b = new BodyRenderer(Color.RED, BodyPartType.INERT);
             b.addFixture(new BodyFixture(Geometry.createPolygonalCircle(7, 0.2)));
-            b.translate(new Vector2(-5,-1));
+            b.translate(new Vector2(-0.1*i,-3));
             b.setMass(MassType.NORMAL);
             world.addBody(b);
         }
